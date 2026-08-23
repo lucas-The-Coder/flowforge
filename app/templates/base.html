@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}FlowForge{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
+</head>
+
+<body class="bg-slate-950 text-white">
+
+    <div class="min-h-screen flex">
+
+        <aside class="w-64 bg-slate-900 border-r border-slate-800 p-6">
+
+            <div class="mb-10">
+                <h1 class="text-2xl font-bold">⚡ FlowForge</h1>
+                <p class="text-sm text-slate-400 mt-1">
+                    Business Automation
+                </p>
+            </div>
+
+            <nav class="space-y-2">
+
+                <a href="/" class="block px-4 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 transition">
+                    📊 Dashboard
+                </a>
+
+                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+                    👥 CRM
+                </a>
+
+                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+                    📧 Emails
+                </a>
+
+                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+                    📅 Calendar
+                </a>
+
+                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+                    ✅ Tasks
+                </a>
+
+                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+                    ⚙️ Automations
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="flex-1">
+
+            <header class="h-20 border-b border-slate-800 px-8 flex items-center justify-between">
+
+                <h2 class="text-xl font-semibold">
+                    {% block header %}Dashboard{% endblock %}
+                </h2>
+
+                <span class="text-sm text-slate-400">
+                    FlowForge v0.1.0
+                </span>
+
+            </header>
+
+            <section class="p-8">
+                {% block content %}{% endblock %}
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

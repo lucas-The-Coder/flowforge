@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}
+FlowForge Dashboard
+{% endblock %}
+
+{% block header %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-8">
+
+    <h1 class="text-3xl font-bold">
+        Welcome to FlowForge
+    </h1>
+
+    <p class="text-slate-400 mt-2">
+        Your business automation command centre.
+    </p>
+
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <p class="text-slate-400 text-sm">New Leads</p>
+        <p class="text-3xl font-bold mt-2">0</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <p class="text-slate-400 text-sm">Active Deals</p>
+        <p class="text-3xl font-bold mt-2">0</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <p class="text-slate-400 text-sm">Tasks</p>
+        <p class="text-3xl font-bold mt-2">0</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <p class="text-slate-400 text-sm">Automations</p>
+        <p class="text-3xl font-bold mt-2">0</p>
+    </div>
+
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+
+        <h3 class="text-lg font-semibold">
+            Today's Activity
+        </h3>
+
+        <p class="mt-6 text-slate-400 text-sm">
+            No activity yet.
+        </p>
+
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+
+        <h3 class="text-lg font-semibold">
+            AI Priorities
+        </h3>
+
+        <p class="mt-6 text-slate-400 text-sm">
+            AI insights will appear here once email intelligence is enabled.
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
