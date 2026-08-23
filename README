@@ -1,0 +1,60 @@
+# ⚡ FlowForge
+
+<p align="center">
+  <strong>Turn business communication into action.</strong>
+</p>
+
+<p align="center">
+  AI powered business automation for email, CRM, calendars, tasks, follow ups, and analytics.
+</p>
+
+<p align="center">
+
+![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![HTMX](https://img.shields.io/badge/HTMX-Frontend-3366CC?style=for-the-badge&logo=htmx&logoColor=white)
+![AI](https://img.shields.io/badge/AI-Powered-8B5CF6?style=for-the-badge)
+
+</p>
+
+---
+
+## 🚀 What is FlowForge?
+
+**FlowForge** is a Python based business automation platform designed to connect business communication, customer data, calendars, tasks, and AI into one intelligent workflow.
+
+Instead of forcing businesses to manually process every email, update customer records, schedule meetings, create follow up tasks, and track productivity, FlowForge automates the repetitive work.
+
+### The core idea
+
+> **Communication → Intelligence → Data → Action → Follow Up → Insights**
+
+FlowForge transforms incoming business communication into structured business activity.
+
+---
+
+## 🎯 The Problem
+
+Businesses waste huge amounts of time manually handling repetitive administrative work.
+
+Typical workflow:
+
+```text
+Email arrives
+     ↓
+Employee reads email
+     ↓
+Employee identifies customer
+     ↓
+Employee updates CRM
+     ↓
+Employee checks calendar
+     ↓
+Employee schedules meeting
+     ↓
+Employee creates task
+     ↓
+Employee remembers to follow up
+     ↓
+Employee updates reports
