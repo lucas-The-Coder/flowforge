@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  AI powered business automation for email, CRM, calendars, tasks, follow ups, and analytics.
+  AI-powered business automation for email, CRM, calendars, tasks, follow-ups, and analytics.
 </p>
 
 <p align="center">
@@ -22,13 +22,13 @@
 
 ## 🚀 What is FlowForge?
 
-**FlowForge** is a Python based business automation platform designed to connect business communication, customer data, calendars, tasks, and AI into one intelligent workflow.
+**FlowForge** is a Python-based business automation platform designed to connect business communication, customer data, calendars, tasks, and AI into one intelligent workflow.
 
-Instead of forcing businesses to manually process every email, update customer records, schedule meetings, create follow up tasks, and track productivity, FlowForge automates the repetitive work.
+Instead of forcing businesses to manually process every email, update customer records, schedule meetings, create follow-up tasks, and track productivity, FlowForge automates the repetitive work.
 
-### The core idea
+### The Core Idea
 
-> **Communication → Intelligence → Data → Action → Follow Up → Insights**
+> **Communication → Intelligence → Data → Action → Follow-up → Insights**
 
 FlowForge transforms incoming business communication into structured business activity.
 
@@ -38,7 +38,7 @@ FlowForge transforms incoming business communication into structured business ac
 
 Businesses waste huge amounts of time manually handling repetitive administrative work.
 
-Typical workflow:
+A typical workflow looks like this:
 
 ```text
 Email arrives
