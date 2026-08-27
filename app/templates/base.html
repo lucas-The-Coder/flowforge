@@ -11,72 +11,260 @@
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 
     <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        flow: {
+                            50: "#f5f3ff",
+                            100: "#ede9fe",
+                            200: "#ddd6fe",
+                            300: "#c4b5fd",
+                            400: "#a78bfa",
+                            500: "#8b5cf6",
+                            600: "#7c3aed",
+                            700: "#6d28d9",
+                            800: "#5b21b6",
+                            900: "#4c1d95"
+                        }
+                    }
+                }
+            }
+        };
+    </script>
 </head>
 
-<body class="bg-slate-950 text-white">
+<body class="min-h-screen bg-slate-950 text-slate-100">
+
+    {% block body %}
 
     <div class="min-h-screen flex">
 
-        <aside class="w-64 bg-slate-900 border-r border-slate-800 p-6">
+        <!-- Sidebar -->
+        <aside class="hidden lg:flex lg:flex-col w-72 bg-slate-900 border-r border-slate-800">
 
-            <div class="mb-10">
-                <h1 class="text-2xl font-bold">⚡ FlowForge</h1>
-                <p class="text-sm text-slate-400 mt-1">
-                    Business Automation
-                </p>
+            <!-- Logo -->
+            <div class="px-6 py-6 border-b border-slate-800">
+
+                <a href="/" class="flex items-center gap-3">
+
+                    <div
+                        class="w-11 h-11 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center">
+                        <span class="text-2xl">⚡</span>
+                    </div>
+
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">
+                            FlowForge
+                        </h1>
+
+                        <p class="text-xs text-slate-500">
+                            Business Automation
+                        </p>
+                    </div>
+
+                </a>
+
             </div>
 
-            <nav class="space-y-2">
+            <!-- Navigation -->
+            <nav class="flex-1 p-4 space-y-2">
 
-                <a href="/" class="block px-4 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 transition">
-                    📊 Dashboard
+                <a href="/"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl bg-violet-600/10 text-violet-300 border border-violet-500/10 hover:bg-violet-600/20 transition">
+                    <span>📊</span>
+                    <span>Dashboard</span>
                 </a>
 
-                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-                    👥 CRM
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <span>👥</span>
+                    <span>CRM</span>
                 </a>
 
-                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-                    📧 Emails
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <span>📧</span>
+                    <span>Emails</span>
                 </a>
 
-                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-                    📅 Calendar
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <span>📅</span>
+                    <span>Calendar</span>
                 </a>
 
-                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-                    ✅ Tasks
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <span>✅</span>
+                    <span>Tasks</span>
                 </a>
 
-                <a href="#" class="block px-4 py-3 rounded-lg hover:bg-slate-800 transition">
-                    ⚙️ Automations
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <span>⚙️</span>
+                    <span>Automations</span>
+                </a>
+
+                <a href="#"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <span>📈</span>
+                    <span>Analytics</span>
                 </a>
 
             </nav>
 
+            <!-- User section -->
+            <div class="p-4 border-t border-slate-800">
+
+                {% if user is defined %}
+
+                <div class="flex items-center gap-3 px-3 py-3 mb-3 rounded-xl bg-slate-800/50">
+
+                    <div class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center font-semibold">
+                        {{ user.full_name[0]|upper }}
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+
+                        <p class="text-sm font-medium truncate">
+                            {{ user.full_name }}
+                        </p>
+
+                        <p class="text-xs text-slate-500 truncate">
+                            {{ user.email }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <form method="post" action="/auth/logout">
+
+                    <button type="submit"
+                        class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                        <span>↪</span>
+                        <span>Sign out</span>
+                    </button>
+
+                </form>
+
+                {% endif %}
+
+            </div>
+
         </aside>
 
-        <main class="flex-1">
 
-            <header class="h-20 border-b border-slate-800 px-8 flex items-center justify-between">
+        <!-- Main area -->
+        <div class="flex-1 min-w-0">
 
-                <h2 class="text-xl font-semibold">
-                    {% block header %}Dashboard{% endblock %}
-                </h2>
+            <!-- Desktop header -->
+            <header
+                class="hidden lg:flex h-20 px-8 border-b border-slate-800 items-center justify-between bg-slate-950/80 backdrop-blur">
 
-                <span class="text-sm text-slate-400">
-                    FlowForge v0.1.0
-                </span>
+                <div>
+
+                    <h2 class="text-xl font-semibold">
+                        {% block header %}Dashboard{% endblock %}
+                    </h2>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        {% block header_subtitle %}Your business at a glance{% endblock %}
+                    </p>
+
+                </div>
+
+                <div class="flex items-center gap-4">
+
+                    <button class="w-10 h-10 rounded-xl border border-slate-800 hover:bg-slate-900 transition"
+                        title="Notifications">
+                        🔔
+                    </button>
+
+                    <div class="text-right">
+
+                        {% if user is defined %}
+
+                        <p class="text-sm font-medium">
+                            {{ user.full_name }}
+                        </p>
+
+                        <p class="text-xs text-slate-500">
+                            FlowForge Workspace
+                        </p>
+
+                        {% else %}
+
+                        <p class="text-sm text-slate-400">
+                            FlowForge
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
 
             </header>
 
-            <section class="p-8">
-                {% block content %}{% endblock %}
-            </section>
 
-        </main>
+            <!-- Mobile header -->
+            <header class="lg:hidden border-b border-slate-800 px-4 py-4 bg-slate-950">
+
+                <div class="flex items-center justify-between">
+
+                    <a href="/" class="flex items-center gap-3">
+
+                        <div
+                            class="w-10 h-10 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center">
+                            ⚡
+                        </div>
+
+                        <div>
+                            <h1 class="font-bold">
+                                FlowForge
+                            </h1>
+
+                            <p class="text-xs text-slate-500">
+                                Business Automation
+                            </p>
+                        </div>
+
+                    </a>
+
+                    {% if user is defined %}
+
+                    <form method="post" action="/auth/logout">
+
+                        <button type="submit" class="text-sm text-slate-400 hover:text-white">
+                            Sign out
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+            </header>
+
+
+            <!-- Page -->
+            <main class="p-4 sm:p-6 lg:p-8">
+
+                {% block content %}
+                {% endblock %}
+
+            </main>
+
+        </div>
 
     </div>
+
+    {% endblock %}
 
 </body>
 

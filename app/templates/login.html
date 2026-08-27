@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login | FlowForge
+{% endblock %}
+
+{% block body %}
+
+<div class="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-12">
+
+    <div class="w-full max-w-md">
+
+        <!-- Logo -->
+        <div class="text-center mb-8">
+
+            <a href="/" class="inline-flex items-center gap-3">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center">
+                    <span class="text-3xl">⚡</span>
+                </div>
+
+            </a>
+
+            <h1 class="mt-5 text-3xl font-bold tracking-tight">
+                Welcome back
+            </h1>
+
+            <p class="mt-2 text-slate-400">
+                Sign in to your FlowForge workspace.
+            </p>
+
+        </div>
+
+
+        <!-- Login card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-black/20">
+
+            <form method="post" action="/auth/login" class="space-y-5">
+
+                <!-- Email -->
+                <div>
+
+                    <label for="email" class="block text-sm font-medium text-slate-200 mb-2">
+                        Email address
+                    </label>
+
+                    <input id="email" name="email" type="email" required autocomplete="email"
+                        placeholder="you@company.com"
+                        class="w-full px-4 py-3.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-600 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20">
+
+                </div>
+
+
+                <!-- Password -->
+                <div>
+
+                    <div class="flex items-center justify-between mb-2">
+
+                        <label for="password" class="block text-sm font-medium text-slate-200">
+                            Password
+                        </label>
+
+                        <a href="#" class="text-sm text-violet-400 hover:text-violet-300 transition">
+                            Forgot password?
+                        </a>
+
+                    </div>
+
+                    <input id="password" name="password" type="password" required autocomplete="current-password"
+                        placeholder="Enter your password"
+                        class="w-full px-4 py-3.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-600 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20">
+
+                </div>
+
+
+                <!-- Remember -->
+                <label class="flex items-center gap-3 cursor-pointer">
+
+                    <input type="checkbox" name="remember"
+                        class="w-4 h-4 rounded border-slate-700 bg-slate-950 text-violet-600 focus:ring-violet-500">
+
+                    <span class="text-sm text-slate-400">
+                        Keep me signed in
+                    </span>
+
+                </label>
+
+
+                <!-- Submit -->
+                <button type="submit"
+                    class="w-full px-4 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 active:bg-violet-700 font-semibold text-white transition shadow-lg shadow-violet-900/20">
+                    Sign in
+                </button>
+
+            </form>
+
+
+            <!-- Divider -->
+            <div class="flex items-center gap-4 my-8">
+
+                <div class="flex-1 h-px bg-slate-800"></div>
+
+                <span class="text-xs uppercase tracking-wider text-slate-600">
+                    New to FlowForge?
+                </span>
+
+                <div class="flex-1 h-px bg-slate-800"></div>
+
+            </div>
+
+
+            <!-- Register -->
+            <a href="/register"
+                class="flex items-center justify-center w-full px-4 py-3.5 rounded-xl border border-slate-700 hover:bg-slate-800 hover:border-slate-600 text-slate-200 font-medium transition">
+                Create an account
+            </a>
+
+        </div>
+
+
+        <p class="text-center text-xs text-slate-600 mt-6">
+            FlowForge Business Automation Platform
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
