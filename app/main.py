@@ -12,9 +12,11 @@ from app.config import settings
 from app.database import get_db
 from app.models.user import User
 from app.services.security import decode_access_token
+from app.services.workspace_auth import get_current_workspace
 
 
 BASE_DIR = Path(__file__).resolve().parent
+
 
 app = FastAPI(
     title=settings.app_name,
@@ -22,15 +24,18 @@ app = FastAPI(
     description="AI-powered business automation platform",
 )
 
+
 app.mount(
     "/static",
     StaticFiles(directory=BASE_DIR / "static"),
     name="static",
 )
 
+
 templates = Jinja2Templates(
     directory=BASE_DIR / "templates",
 )
+
 
 app.include_router(auth_router)
 
@@ -66,7 +71,7 @@ async def register_page(request: Request):
     )
 
 
-def get_browser_user_from_session(
+def get_browser_user(
     request: Request,
     db: Session,
 ) -> User | None:
@@ -93,7 +98,7 @@ async def dashboard(
     request: Request,
     db: Session = Depends(get_db),
 ):
-    user = get_browser_user_from_session(request, db)
+    user = get_browser_user(request, db)
 
     if user is None:
         return RedirectResponse(
@@ -101,11 +106,18 @@ async def dashboard(
             status_code=303,
         )
 
+    workspace = get_current_workspace(
+        request=request,
+        db=db,
+        user=user,
+    )
+
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
         context={
             "title": "Dashboard",
             "user": user,
+            "workspace": workspace,
         },
     )

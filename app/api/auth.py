@@ -35,6 +35,21 @@ def set_session_cookie(
     )
 
 
+def set_workspace_cookie(
+    response: RedirectResponse,
+    workspace_id: str,
+) -> None:
+    response.set_cookie(
+        key="flowforge_workspace",
+        value=workspace_id,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=60 * 60 * 24 * 30,
+        path="/",
+    )
+
+
 @router.post("/register")
 def register(
     email: str = Form(...),
@@ -77,8 +92,7 @@ def register(
     db.flush()
 
     slug_base = (
-        full_name
-        .lower()
+        full_name.lower()
         .strip()
         .replace(" ", "-")
     )
@@ -108,6 +122,7 @@ def register(
     )
 
     set_session_cookie(response, token)
+    set_workspace_cookie(response, workspace.id)
 
     return response
 
@@ -139,6 +154,18 @@ def login(
             detail="User account is inactive.",
         )
 
+    membership = db.scalar(
+        select(WorkspaceMember)
+        .where(WorkspaceMember.user_id == user.id)
+        .order_by(WorkspaceMember.created_at.asc())
+    )
+
+    if not membership:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No workspace is associated with this account.",
+        )
+
     token = create_access_token(user.id)
 
     response = RedirectResponse(
@@ -147,6 +174,7 @@ def login(
     )
 
     set_session_cookie(response, token)
+    set_workspace_cookie(response, membership.workspace_id)
 
     return response
 
@@ -160,6 +188,11 @@ def logout():
 
     response.delete_cookie(
         key="flowforge_session",
+        path="/",
+    )
+
+    response.delete_cookie(
+        key="flowforge_workspace",
         path="/",
     )
 

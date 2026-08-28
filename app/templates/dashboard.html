@@ -8,67 +8,179 @@ FlowForge Dashboard
 Dashboard
 {% endblock %}
 
+{% block header_subtitle %}
+{{ workspace.name }}
+{% endblock %}
+
 {% block content %}
 
-<div class="mb-8">
+<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
 
-    <h1 class="text-3xl font-bold">
-        Welcome to FlowForge
-    </h1>
+    <div>
 
-    <p class="text-slate-400 mt-2">
-        Your business automation command centre.
-    </p>
+        <p class="text-sm text-slate-500 mb-2">
+            {{ workspace.name }}
+        </p>
 
-</div>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">
+            Welcome back, {{ user.full_name }}
+        </h1>
 
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-        <p class="text-slate-400 text-sm">New Leads</p>
-        <p class="text-3xl font-bold mt-2">0</p>
-    </div>
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-        <p class="text-slate-400 text-sm">Active Deals</p>
-        <p class="text-3xl font-bold mt-2">0</p>
-    </div>
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-        <p class="text-slate-400 text-sm">Tasks</p>
-        <p class="text-3xl font-bold mt-2">0</p>
-    </div>
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-        <p class="text-slate-400 text-sm">Automations</p>
-        <p class="text-3xl font-bold mt-2">0</p>
-    </div>
-
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-
-        <h3 class="text-lg font-semibold">
-            Today's Activity
-        </h3>
-
-        <p class="mt-6 text-slate-400 text-sm">
-            No activity yet.
+        <p class="text-slate-400 mt-2">
+            Here is what is happening across your business.
         </p>
 
     </div>
 
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+    <div>
 
-        <h3 class="text-lg font-semibold">
+        <span
+            class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            Workspace active
+        </span>
+
+    </div>
+
+</div>
+
+
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <p class="text-sm text-slate-500">
+            New leads
+        </p>
+
+        <p class="text-3xl font-bold mt-3">
+            0
+        </p>
+
+        <p class="text-xs text-slate-600 mt-2">
+            No lead data yet
+        </p>
+
+    </div>
+
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <p class="text-sm text-slate-500">
+            Active deals
+        </p>
+
+        <p class="text-3xl font-bold mt-3">
+            0
+        </p>
+
+        <p class="text-xs text-slate-600 mt-2">
+            No deal data yet
+        </p>
+
+    </div>
+
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <p class="text-sm text-slate-500">
+            Tasks
+        </p>
+
+        <p class="text-3xl font-bold mt-3">
+            0
+        </p>
+
+        <p class="text-xs text-slate-600 mt-2">
+            No tasks yet
+        </p>
+
+    </div>
+
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <p class="text-sm text-slate-500">
+            Automations
+        </p>
+
+        <p class="text-3xl font-bold mt-3">
+            0
+        </p>
+
+        <p class="text-xs text-slate-600 mt-2">
+            No automations yet
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+
+    <div class="xl:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <h2 class="text-lg font-semibold">
+                    Today's Activity
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Recent business activity will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="mt-8 py-12 text-center">
+
+            <div class="text-4xl mb-4">
+                📊
+            </div>
+
+            <p class="text-slate-400">
+                Your activity timeline is ready.
+            </p>
+
+            <p class="text-sm text-slate-600 mt-1">
+                Connect your business systems to start collecting data.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <h2 class="text-lg font-semibold">
             AI Priorities
-        </h3>
+        </h2>
 
-        <p class="mt-6 text-slate-400 text-sm">
-            AI insights will appear here once email intelligence is enabled.
+        <p class="text-sm text-slate-500 mt-1">
+            Intelligent recommendations
         </p>
+
+        <div class="mt-8 py-12 text-center">
+
+            <div class="text-4xl mb-4">
+                🤖
+            </div>
+
+            <p class="text-slate-400">
+                AI recommendations will appear here.
+            </p>
+
+            <p class="text-sm text-slate-600 mt-1">
+                Email intelligence is coming next.
+            </p>
+
+        </div>
 
     </div>
 
