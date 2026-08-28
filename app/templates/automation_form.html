@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+
+{% block title %}
+Automations | FlowForge
+{% endblock %}
+
+{% block header %}
+Automations
+{% endblock %}
+
+{% block header_subtitle %}
+Automate repetitive work across your business
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    ```
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+
+        <div>
+            <h1 class="text-3xl font-bold">
+                Automations
+            </h1>
+
+            <p class="text-slate-500 mt-2">
+                Build, manage and monitor your business workflows.
+            </p>
+        </div>
+
+        <a href="/automations/new"
+            class="px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+            + New Automation
+        </a>
+
+    </div>
+
+
+    <!-- Statistics -->
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+
+        <!-- Total -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Total Automations
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ automations|length }}
+            </p>
+
+        </div>
+
+
+        <!-- Active -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Active
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{
+                automations
+                |selectattr("is_active", "equalto", true)
+                |list
+                |length
+                }}
+            </p>
+
+        </div>
+
+
+        <!-- Paused -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Paused
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{
+                automations
+                |selectattr("is_active", "equalto", false)
+                |list
+                |length
+                }}
+            </p>
+
+        </div>
+
+
+        <!-- Runs -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Total Runs
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ total_runs or 0 }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Filters -->
+    <div class="flex flex-col sm:flex-row gap-3">
+
+        <a href="/automations" class="px-4 py-2.5 rounded-xl bg-violet-600 text-sm font-medium">
+            All
+        </a>
+
+        <a href="/automations?status=active"
+            class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-sm transition">
+            Active
+        </a>
+
+        <a href="/automations?status=paused"
+            class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-sm transition">
+            Paused
+        </a>
+
+        <div class="flex-1"></div>
+
+        <div class="relative">
+
+            <input type="text" id="automationSearch" placeholder="Search automations..."
+                class="w-full sm:w-64 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition">
+
+        </div>
+
+    </div>
+
+
+    <!-- Automations -->
+    <div id="automationList" class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+        {% if automations %}
+
+        <div class="divide-y divide-slate-800">
+
+            {% for automation in automations %}
+
+            <div class="automation-item p-5 hover:bg-slate-800/30 transition"
+                data-search="{{ automation.name }} {{ automation.description or '' }}">
+
+                <div class="flex flex-col xl:flex-row xl:items-center gap-5">
+
+                    <!-- Automation Icon -->
+                    <div class="
+                        w-12
+                        h-12
+                        rounded-xl
+                        bg-violet-600/10
+                        text-violet-400
+                        flex
+                        items-center
+                        justify-center
+                        text-xl
+                        flex-shrink-0
+                    ">
+                        ⚡
+                    </div>
+
+
+                    <!-- Information -->
+                    <div class="flex-1 min-w-0">
+
+                        <div class="flex flex-wrap items-center gap-3">
+
+                            <h2 class="font-semibold text-lg">
+                                {{ automation.name }}
+                            </h2>
+
+
+                            {% if automation.is_active %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-medium">
+                                ● Active
+                            </span>
+
+                            {% else %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-500 text-xs font-medium">
+                                ● Paused
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if automation.description %}
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            {{ automation.description }}
+                        </p>
+
+                        {% endif %}
+
+
+                        <!-- Workflow -->
+                        <div class="flex flex-wrap items-center gap-2 mt-4">
+
+                            {% if automation.trigger_type %}
+
+                            <span class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs">
+
+                                <span class="text-slate-600">
+                                    Trigger
+                                </span>
+
+                                <span class="ml-1 text-slate-300">
+                                    {{ automation.trigger_type|replace("_", " ")|title }}
+                                </span>
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.action_count is defined %}
+
+                            <span class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs">
+
+                                <span class="text-slate-600">
+                                    Actions
+                                </span>
+
+                                <span class="ml-1 text-slate-300">
+                                    {{ automation.action_count }}
+                                </span>
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.run_count is defined %}
+
+                            <span class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs">
+
+                                <span class="text-slate-600">
+                                    Runs
+                                </span>
+
+                                <span class="ml-1 text-slate-300">
+                                    {{ automation.run_count }}
+                                </span>
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.last_run_at %}
+
+                            <span class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs">
+
+                                <span class="text-slate-600">
+                                    Last Run
+                                </span>
+
+                                <span class="ml-1 text-slate-300">
+                                    {{ automation.last_run_at.strftime("%d %b %Y %H:%M") }}
+                                </span>
+
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="flex flex-wrap gap-2">
+
+                        <a href="/automations/{{ automation.id }}/edit"
+                            class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm transition">
+                            Edit
+                        </a>
+
+
+                        <!-- Run -->
+                        <form method="post" action="/automations/{{ automation.id }}/run">
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-sm font-medium transition">
+                                ▶ Run
+                            </button>
+
+                        </form>
+
+
+                        <!-- Toggle -->
+                        <form method="post" action="/automations/{{ automation.id }}/toggle">
+
+                            {% if automation.is_active %}
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-sm transition">
+                                Pause
+                            </button>
+
+                            {% else %}
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-sm transition">
+                                Activate
+                            </button>
+
+                            {% endif %}
+
+                        </form>
+
+
+                        <!-- Delete -->
+                        <form method="post" action="/automations/{{ automation.id }}/delete"
+                            onsubmit="return confirm('Delete this automation?');">
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm transition">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="py-20 text-center">
+
+            <div class="text-5xl">
+                ⚡
+            </div>
+
+            <h2 class="text-xl font-semibold mt-4">
+                No automations yet
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-2 max-w-md mx-auto">
+                Create your first automation to eliminate repetitive work
+                and connect your business processes.
+            </p>
+
+            <a href="/automations/new"
+                class="inline-flex mt-6 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                + Create Automation
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Automation Concept -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <div class="flex items-start gap-4">
+
+            <div
+                class="w-11 h-11 rounded-xl bg-violet-600/10 flex items-center justify-center text-violet-400 text-xl flex-shrink-0">
+                🤖
+            </div>
+
+            <div>
+
+                <h3 class="font-semibold">
+                    Build smarter workflows
+                </h3>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Connect triggers, conditions and actions to automate
+                    repetitive business processes.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-2 mt-4 text-xs">
+
+                    <span class="px-3 py-1.5 rounded-lg bg-slate-800">
+                        Trigger
+                    </span>
+
+                    <span class="text-slate-700">
+                        →
+                    </span>
+
+                    <span class="px-3 py-1.5 rounded-lg bg-slate-800">
+                        Condition
+                    </span>
+
+                    <span class="text-slate-700">
+                        →
+                    </span>
+
+                    <span class="px-3 py-1.5 rounded-lg bg-slate-800">
+                        Action
+                    </span>
+
+                    <span class="text-slate-700">
+                        →
+                    </span>
+
+                    <span class="px-3 py-1.5 rounded-lg bg-violet-600/10 text-violet-300">
+                        Result
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    ```
+
+</div>
+
+<!-- Search -->
+
+<script>
+
+    const searchInput = document.getElementById("automationSearch");
+
+    if (searchInput) {
+
+        searchInput.addEventListener("input", function () {
+
+            const query = this.value.toLowerCase().trim();
+
+            document.querySelectorAll(".automation-item").forEach(item => {
+
+                const searchText =
+                    item.dataset.search.toLowerCase();
+
+                if (searchText.includes(query)) {
+
+                    item.style.display = "";
+
+                } else {
+
+                    item.style.display = "none";
+
+                }
+
+            });
+
+        });
+
+    }
+
+</script>
+
+{% endblock %}

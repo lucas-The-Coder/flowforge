@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}
+Compose Email | FlowForge
+{% endblock %}
+
+{% block header %}
+Email
+{% endblock %}
+
+{% block header_subtitle %}
+Compose and send business emails
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto space-y-6">
+
+    ```
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+
+        <div>
+            <h1 class="text-3xl font-bold">
+                Compose Email
+            </h1>
+
+            <p class="text-slate-500 mt-2">
+                Write, review and send an email from FlowForge.
+            </p>
+        </div>
+
+        <a href="/email"
+            class="px-5 py-3 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 transition">
+            ← Back to Inbox
+        </a>
+
+    </div>
+
+
+    <!-- Email Composer -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+        <!-- Composer Header -->
+        <div class="px-6 py-5 border-b border-slate-800">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl bg-violet-600/10 flex items-center justify-center text-violet-400">
+                    ✉️
+                </div>
+
+                <div>
+                    <h2 class="font-semibold">
+                        New Email
+                    </h2>
+
+                    <p class="text-sm text-slate-500">
+                        Send a professional email to your contacts.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Form -->
+        <form method="post" action="/email/send" enctype="multipart/form-data">
+
+            <div class="p-6 space-y-5">
+
+                <!-- From -->
+                <div>
+
+                    <label for="from" class="block text-sm font-medium text-slate-300 mb-2">
+                        From
+                    </label>
+
+                    <input type="email" id="from" name="from" value="{{ current_user.email if current_user else '' }}"
+                        readonly
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-400 cursor-not-allowed">
+
+                </div>
+
+
+                <!-- To -->
+                <div>
+
+                    <label for="to" class="block text-sm font-medium text-slate-300 mb-2">
+                        To
+                    </label>
+
+                    <input type="text" id="to" name="to" value="{{ recipient if recipient else '' }}"
+                        placeholder="client@example.com" required autocomplete="email"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition">
+
+                    <p class="text-xs text-slate-600 mt-2">
+                        Separate multiple recipients with commas.
+                    </p>
+
+                </div>
+
+
+                <!-- CC / BCC -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div>
+
+                        <label for="cc" class="block text-sm font-medium text-slate-300 mb-2">
+                            CC
+                        </label>
+
+                        <input type="text" id="cc" name="cc" placeholder="Optional"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition">
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="bcc" class="block text-sm font-medium text-slate-300 mb-2">
+                            BCC
+                        </label>
+
+                        <input type="text" id="bcc" name="bcc" placeholder="Optional"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition">
+
+                    </div>
+
+                </div>
+
+
+                <!-- Subject -->
+                <div>
+
+                    <label for="subject" class="block text-sm font-medium text-slate-300 mb-2">
+                        Subject
+                    </label>
+
+                    <input type="text" id="subject" name="subject" placeholder="Enter email subject" required
+                        maxlength="255"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition">
+
+                </div>
+
+
+                <!-- Message -->
+                <div>
+
+                    <label for="body" class="block text-sm font-medium text-slate-300 mb-2">
+                        Message
+                    </label>
+
+                    <textarea id="body" name="body" rows="14" placeholder="Write your email..." required
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 outline-none resize-y focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition leading-relaxed"></textarea>
+
+                </div>
+
+
+                <!-- Attachments -->
+                <div>
+
+                    <label for="attachments" class="block text-sm font-medium text-slate-300 mb-2">
+                        Attachments
+                    </label>
+
+                    <div
+                        class="border-2 border-dashed border-slate-800 hover:border-violet-500/50 rounded-xl p-6 text-center transition">
+
+                        <div class="text-3xl mb-2">
+                            📎
+                        </div>
+
+                        <p class="text-sm text-slate-400">
+                            Attach files to this email
+                        </p>
+
+                        <p class="text-xs text-slate-600 mt-1">
+                            PDF, DOCX, XLSX, PNG, JPG and other common formats
+                        </p>
+
+                        <label for="attachments"
+                            class="inline-flex mt-4 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-sm cursor-pointer transition">
+                            Choose Files
+                        </label>
+
+                        <input type="file" id="attachments" name="attachments" multiple class="hidden">
+
+                        <div id="file-list" class="mt-4 text-sm text-slate-500"></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Email Options -->
+                <div class="border-t border-slate-800 pt-5">
+
+                    <h3 class="text-sm font-semibold mb-4">
+                        Email Options
+                    </h3>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input type="checkbox" name="track_email" value="true"
+                                class="w-4 h-4 rounded border-slate-700 bg-slate-950 text-violet-600 focus:ring-violet-500">
+
+                            <span class="text-sm text-slate-400">
+                                Track email
+                            </span>
+
+                        </label>
+
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input type="checkbox" name="create_task" value="true"
+                                class="w-4 h-4 rounded border-slate-700 bg-slate-950 text-violet-600 focus:ring-violet-500">
+
+                            <span class="text-sm text-slate-400">
+                                Create follow-up task
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="px-6 py-5 border-t border-slate-800 bg-slate-950/40">
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+                    <a href="/email"
+                        class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-medium text-center transition">
+                        Cancel
+                    </a>
+
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+
+                        <button type="submit" name="action" value="draft"
+                            class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold transition">
+                            Save Draft
+                        </button>
+
+
+                        <button type="submit" name="action" value="send"
+                            class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                            Send Email →
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- Quick Tips -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+        <div class="flex items-start gap-4">
+
+            <div class="text-xl">
+                💡
+            </div>
+
+            <div>
+
+                <h3 class="font-semibold">
+                    Email automation
+                </h3>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    FlowForge can eventually automate follow-ups, schedule emails,
+                    connect emails to CRM contacts and create tasks from conversations.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+    ```
+
+</div>
+
+<!-- Attachment Display -->
+
+<script>
+
+    const attachmentInput = document.getElementById("attachments");
+    const fileList = document.getElementById("file-list");
+
+    attachmentInput.addEventListener("change", function () {
+
+        fileList.innerHTML = "";
+
+        if (!this.files.length) {
+            return;
+        }
+
+        const list = document.createElement("div");
+        list.className = "space-y-1";
+
+        Array.from(this.files).forEach(file => {
+
+            const item = document.createElement("div");
+
+            item.className =
+                "flex items-center justify-center gap-2 text-slate-400";
+
+            item.innerHTML = `
+                <span>📎</span>
+                <span>${file.name}</span>
+                <span class="text-slate-600">
+                    (${(file.size / 1024 / 1024).toFixed(2)} MB)
+                </span>
+            `;
+
+            list.appendChild(item);
+
+        });
+
+        fileList.appendChild(list);
+
+    });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,809 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Analysis | FlowForge
+
+{% endblock %}
+
+{% block header %}
+
+Analysis
+
+{% endblock %}
+
+{% block header_subtitle %}
+
+Understand your business performance and productivity
+
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    ```
+    <!-- Page Header -->
+
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+
+                Business Analysis
+
+            </h1>
+
+            <p class="text-slate-500 mt-2">
+
+                Monitor activity, productivity, communications and automation performance.
+
+            </p>
+
+        </div>
+
+
+        <div class="flex gap-2">
+
+            <button onclick="window.location.reload()"
+                class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold transition">
+
+                ↻ Refresh
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Main Statistics -->
+
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+
+        <!-- Tasks -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <div class="flex items-center justify-between">
+
+                <p class="text-sm text-slate-500">
+
+                    Tasks
+
+                </p>
+
+                <span class="text-xl">
+
+                    ✓
+
+                </span>
+
+            </div>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{ total_tasks or 0 }}
+
+            </p>
+
+            <p class="text-xs text-slate-500 mt-2">
+
+                {{ completed_tasks or 0 }} completed
+
+            </p>
+
+        </div>
+
+
+        <!-- Emails -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <div class="flex items-center justify-between">
+
+                <p class="text-sm text-slate-500">
+
+                    Emails
+
+                </p>
+
+                <span class="text-xl">
+
+                    ✉
+
+                </span>
+
+            </div>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{ total_emails or 0 }}
+
+            </p>
+
+            <p class="text-xs text-slate-500 mt-2">
+
+                {{ emails_sent or 0 }} sent
+
+            </p>
+
+        </div>
+
+
+        <!-- Automations -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <div class="flex items-center justify-between">
+
+                <p class="text-sm text-slate-500">
+
+                    Automations
+
+                </p>
+
+                <span class="text-xl">
+
+                    ⚡
+
+                </span>
+
+            </div>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{ active_automations or 0 }}
+
+            </p>
+
+            <p class="text-xs text-slate-500 mt-2">
+
+                {{ automation_runs or 0 }} total runs
+
+            </p>
+
+        </div>
+
+
+        <!-- Contacts -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <div class="flex items-center justify-between">
+
+                <p class="text-sm text-slate-500">
+
+                    Contacts
+
+                </p>
+
+                <span class="text-xl">
+
+                    👥
+
+                </span>
+
+            </div>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{ total_contacts or 0 }}
+
+            </p>
+
+            <p class="text-xs text-slate-500 mt-2">
+
+                Across your business
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Productivity Overview -->
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+        <!-- Task Performance -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-lg font-semibold">
+
+                        Task Performance
+
+                    </h2>
+
+                    <p class="text-sm text-slate-500 mt-1">
+
+                        Current workload and completion progress.
+
+                    </p>
+
+                </div>
+
+                <span class="text-2xl">
+
+                    📊
+
+                </span>
+
+            </div>
+
+
+            <div class="space-y-5 mt-6">
+
+                <!-- Completed -->
+
+                <div>
+
+                    <div class="flex justify-between text-sm mb-2">
+
+                        <span>
+
+                            Completed
+
+                        </span>
+
+                        <span class="text-slate-500">
+
+                            {{ completed_tasks or 0 }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+
+                        <div class="h-full bg-emerald-500 rounded-full" style="width: {{ task_completion_rate or 0 }}%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- In Progress -->
+
+                <div>
+
+                    <div class="flex justify-between text-sm mb-2">
+
+                        <span>
+
+                            In Progress
+
+                        </span>
+
+                        <span class="text-slate-500">
+
+                            {{ in_progress_tasks or 0 }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+
+                        <div class="h-full bg-violet-500 rounded-full" style="width: {{ task_progress_rate or 0 }}%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- To Do -->
+
+                <div>
+
+                    <div class="flex justify-between text-sm mb-2">
+
+                        <span>
+
+                            To Do
+
+                        </span>
+
+                        <span class="text-slate-500">
+
+                            {{ todo_tasks or 0 }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+
+                        <div class="h-full bg-amber-500 rounded-full" style="width: {{ task_todo_rate or 0 }}%"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Automation Performance -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-lg font-semibold">
+
+                        Automation Performance
+
+                    </h2>
+
+                    <p class="text-sm text-slate-500 mt-1">
+
+                        Monitor automated processes.
+
+                    </p>
+
+                </div>
+
+                <span class="text-2xl">
+
+                    🤖
+
+                </span>
+
+            </div>
+
+
+            <div class="grid grid-cols-2 gap-4 mt-6">
+
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                    <p class="text-sm text-slate-500">
+
+                        Active
+
+                    </p>
+
+                    <p class="text-2xl font-bold mt-2">
+
+                        {{ active_automations or 0 }}
+
+                    </p>
+
+                </div>
+
+
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                    <p class="text-sm text-slate-500">
+
+                        Runs
+
+                    </p>
+
+                    <p class="text-2xl font-bold mt-2">
+
+                        {{ automation_runs or 0 }}
+
+                    </p>
+
+                </div>
+
+
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                    <p class="text-sm text-slate-500">
+
+                        Successful
+
+                    </p>
+
+                    <p class="text-2xl font-bold mt-2">
+
+                        {{ successful_runs or 0 }}
+
+                    </p>
+
+                </div>
+
+
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                    <p class="text-sm text-slate-500">
+
+                        Failed
+
+                    </p>
+
+                    <p class="text-2xl font-bold mt-2">
+
+                        {{ failed_runs or 0 }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Email Analysis -->
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <h2 class="text-lg font-semibold">
+
+                    Email Activity
+
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+
+                    Overview of your business communications.
+
+                </p>
+
+            </div>
+
+            <span class="text-2xl">
+
+                ✉️
+
+            </span>
+
+        </div>
+
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                <p class="text-sm text-slate-500">
+
+                    Received
+
+                </p>
+
+                <p class="text-2xl font-bold mt-2">
+
+                    {{ emails_received or 0 }}
+
+                </p>
+
+            </div>
+
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                <p class="text-sm text-slate-500">
+
+                    Sent
+
+                </p>
+
+                <p class="text-2xl font-bold mt-2">
+
+                    {{ emails_sent or 0 }}
+
+                </p>
+
+            </div>
+
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                <p class="text-sm text-slate-500">
+
+                    Unread
+
+                </p>
+
+                <p class="text-2xl font-bold mt-2">
+
+                    {{ unread_emails or 0 }}
+
+                </p>
+
+            </div>
+
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+                <p class="text-sm text-slate-500">
+
+                    Requiring Action
+
+                </p>
+
+                <p class="text-2xl font-bold mt-2">
+
+                    {{ action_emails or 0 }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Business Activity -->
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+        <!-- Recent Activity -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+            <div class="p-6 border-b border-slate-800">
+
+                <h2 class="text-lg font-semibold">
+
+                    Recent Activity
+
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+
+                    Latest activity across FlowForge.
+
+                </p>
+
+            </div>
+
+
+            {% if recent_activity %}
+
+            <div class="divide-y divide-slate-800">
+
+                {% for activity in recent_activity %}
+
+                <div class="p-5 flex items-start gap-4 hover:bg-slate-800/30 transition">
+
+                    <div
+                        class="w-9 h-9 rounded-xl bg-violet-600/10 text-violet-400 flex items-center justify-center flex-shrink-0">
+
+                        {{ activity.icon or "•" }}
+
+                    </div>
+
+
+                    <div class="flex-1 min-w-0">
+
+                        <p class="text-sm">
+
+                            {{ activity.message }}
+
+                        </p>
+
+                        {% if activity.created_at %}
+
+                        <p class="text-xs text-slate-500 mt-1">
+
+                            {{ activity.created_at.strftime("%d %b %Y %H:%M") }}
+
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="py-12 text-center">
+
+                <div class="text-3xl">
+
+                    📭
+
+                </div>
+
+                <p class="text-sm text-slate-500 mt-3">
+
+                    No recent activity.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Key Metrics -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+            <h2 class="text-lg font-semibold">
+
+                Key Metrics
+
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+
+                Important indicators for your business.
+
+            </p>
+
+
+            <div class="space-y-4 mt-6">
+
+                <div class="flex items-center justify-between p-4 bg-slate-950 border border-slate-800 rounded-xl">
+
+                    <div>
+
+                        <p class="text-sm font-medium">
+
+                            Task Completion Rate
+
+                        </p>
+
+                        <p class="text-xs text-slate-500 mt-1">
+
+                            Percentage of tasks completed
+
+                        </p>
+
+                    </div>
+
+                    <span class="text-xl font-bold">
+
+                        {{ task_completion_rate or 0 }}%
+
+                    </span>
+
+                </div>
+
+
+                <div class="flex items-center justify-between p-4 bg-slate-950 border border-slate-800 rounded-xl">
+
+                    <div>
+
+                        <p class="text-sm font-medium">
+
+                            Automation Success Rate
+
+                        </p>
+
+                        <p class="text-xs text-slate-500 mt-1">
+
+                            Successful automation executions
+
+                        </p>
+
+                    </div>
+
+                    <span class="text-xl font-bold">
+
+                        {{ automation_success_rate or 0 }}%
+
+                    </span>
+
+                </div>
+
+
+                <div class="flex items-center justify-between p-4 bg-slate-950 border border-slate-800 rounded-xl">
+
+                    <div>
+
+                        <p class="text-sm font-medium">
+
+                            Emails Requiring Action
+
+                        </p>
+
+                        <p class="text-xs text-slate-500 mt-1">
+
+                            Messages that may need attention
+
+                        </p>
+
+                    </div>
+
+                    <span class="text-xl font-bold">
+
+                        {{ action_emails or 0 }}
+
+                    </span>
+
+                </div>
+
+
+                <div class="flex items-center justify-between p-4 bg-slate-950 border border-slate-800 rounded-xl">
+
+                    <div>
+
+                        <p class="text-sm font-medium">
+
+                            Active Workload
+
+                        </p>
+
+                        <p class="text-xs text-slate-500 mt-1">
+
+                            Open tasks currently being handled
+
+                        </p>
+
+                    </div>
+
+                    <span class="text-xl font-bold">
+
+                        {{ active_workload or 0 }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Analysis Insight -->
+
+    <div class="bg-violet-600/10 border border-violet-500/20 rounded-2xl p-6">
+
+        <div class="flex items-start gap-4">
+
+            <div class="text-3xl">
+
+                💡
+
+            </div>
+
+
+            <div>
+
+                <h2 class="font-semibold text-violet-300">
+
+                    Business Insight
+
+                </h2>
+
+                <p class="text-sm text-slate-400 mt-2">
+
+                    {{ analysis_summary or "Your business analysis will appear here once FlowForge has enough activity
+                    data to generate meaningful insights." }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+    ```
+
+</div>
+
+{% endblock %}

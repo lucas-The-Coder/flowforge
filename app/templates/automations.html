@@ -1,0 +1,502 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Automations | FlowForge
+
+{% endblock %}
+
+{% block header %}
+
+Automations
+
+{% endblock %}
+
+{% block header_subtitle %}
+
+Automate repetitive work across your business
+
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    ```
+    <!-- Header -->
+
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+
+                Automations
+
+            </h1>
+
+            <p class="text-slate-500 mt-2">
+
+                Create and manage automated business workflows.
+
+            </p>
+
+        </div>
+
+
+        <a href="/automations/new"
+            class="px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+
+            + New Automation
+
+        </a>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+
+        <!-- Total -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+
+                Total
+
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{ automations|length }}
+
+            </p>
+
+        </div>
+
+
+        <!-- Active -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+
+                Active
+
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{
+                automations
+                |selectattr("status", "equalto", "active")
+                |list
+                |length
+                }}
+
+            </p>
+
+        </div>
+
+
+        <!-- Paused -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+
+                Paused
+
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{
+                automations
+                |selectattr("status", "equalto", "paused")
+                |list
+                |length
+                }}
+
+            </p>
+
+        </div>
+
+
+        <!-- Total Runs -->
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+
+                Total Runs
+
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+
+                {{ total_runs or 0 }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Automation List -->
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+        {% if automations %}
+
+        <div class="divide-y divide-slate-800">
+
+            {% for automation in automations %}
+
+            <div class="p-5 hover:bg-slate-800/30 transition">
+
+                <div class="flex flex-col xl:flex-row xl:items-center gap-4">
+
+                    <!-- Automation Info -->
+
+                    <div class="flex-1 min-w-0">
+
+                        <div class="flex items-center gap-3">
+
+                            <!-- Icon -->
+
+                            <div
+                                class="w-10 h-10 rounded-xl bg-violet-600/10 text-violet-400 flex items-center justify-center flex-shrink-0">
+
+                                ⚡
+
+                            </div>
+
+
+                            <div class="min-w-0">
+
+                                <h2 class="font-semibold text-lg truncate">
+
+                                    {{ automation.name }}
+
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if automation.description %}
+
+                        <p class="text-sm text-slate-500 mt-3">
+
+                            {{ automation.description }}
+
+                        </p>
+
+                        {% endif %}
+
+
+                        <!-- Automation Details -->
+
+                        <div class="flex flex-wrap gap-2 mt-3">
+
+                            {% if automation.trigger_type %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+
+                                ⚡ Trigger:
+
+                                {{ automation.trigger_type|replace("_", " ")|title }}
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.action_type %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+
+                                ▶ Action:
+
+                                {{ automation.action_type|replace("_", " ")|title }}
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.status == "active" %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs">
+
+                                ● Active
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 text-xs">
+
+                                ● Paused
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.run_count is defined %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+
+                                🔄
+
+                                {{ automation.run_count }} runs
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.last_run_at %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+
+                                📅
+
+                                {{ automation.last_run_at.strftime("%d %b %Y %H:%M") }}
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if automation.company_id and automation.company_id in company_map %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-violet-600/10 text-violet-300 text-xs">
+
+                                🏢 {{ company_map[automation.company_id] }}
+
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Actions -->
+
+                    <div class="flex flex-wrap gap-2">
+
+                        <a href="/automations/{{ automation.id }}/edit"
+                            class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm transition">
+
+                            Edit
+
+                        </a>
+
+
+                        <!-- Run -->
+
+                        <form method="post" action="/automations/{{ automation.id }}/run">
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-sm font-semibold transition">
+
+                                ▶ Run
+
+                            </button>
+
+                        </form>
+
+
+                        <!-- Toggle -->
+
+                        <form method="post" action="/automations/{{ automation.id }}/toggle">
+
+                            {% if automation.status == "active" %}
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-sm transition">
+
+                                Pause
+
+                            </button>
+
+                            {% else %}
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-sm transition">
+
+                                Activate
+
+                            </button>
+
+                            {% endif %}
+
+                        </form>
+
+
+                        <!-- Delete -->
+
+                        <form method="post" action="/automations/{{ automation.id }}/delete"
+                            onsubmit="return confirm('Delete this automation?');">
+
+                            <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 text-sm transition">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- Empty State -->
+
+        <div class="py-20 text-center">
+
+            <div class="text-5xl">
+
+                ⚡
+
+            </div>
+
+
+            <h2 class="text-xl font-semibold mt-4">
+
+                No automations yet
+
+            </h2>
+
+
+            <p class="text-sm text-slate-500 mt-2">
+
+                Create your first automation to start eliminating repetitive work.
+
+            </p>
+
+
+            <a href="/automations/new"
+                class="inline-flex mt-6 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+
+                + New Automation
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Automation Workflow Explanation -->
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <div class="flex items-start gap-4">
+
+            <div class="text-3xl">
+
+                🤖
+
+            </div>
+
+
+            <div>
+
+                <h2 class="font-semibold">
+
+                    How automations work
+
+                </h2>
+
+
+                <p class="text-sm text-slate-500 mt-1">
+
+                    FlowForge watches for an event and automatically performs the actions you define.
+
+                </p>
+
+
+                <div class="flex flex-wrap items-center gap-2 mt-4">
+
+                    <span class="px-3 py-2 rounded-lg bg-slate-800 text-sm">
+
+                        Trigger
+
+                    </span>
+
+
+                    <span class="text-slate-600">
+
+                        →
+
+                    </span>
+
+
+                    <span class="px-3 py-2 rounded-lg bg-slate-800 text-sm">
+
+                        Conditions
+
+                    </span>
+
+
+                    <span class="text-slate-600">
+
+                        →
+
+                    </span>
+
+
+                    <span class="px-3 py-2 rounded-lg bg-slate-800 text-sm">
+
+                        Actions
+
+                    </span>
+
+
+                    <span class="text-slate-600">
+
+                        →
+
+                    </span>
+
+
+                    <span class="px-3 py-2 rounded-lg bg-violet-600/10 text-violet-300 text-sm">
+
+                        Result
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    ```
+
+</div>
+
+{% endblock %}

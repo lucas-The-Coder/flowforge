@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block title %}
+Emails | FlowForge
+{% endblock %}
+
+{% block header %}
+Emails
+{% endblock %}
+
+{% block header_subtitle %}
+Manage your business email
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    ```
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+
+        <div>
+            <h1 class="text-3xl font-bold">
+                Emails
+            </h1>
+
+            <p class="text-slate-500 mt-2">
+                Manage messages, conversations and follow-ups.
+            </p>
+        </div>
+
+        <a href="/email/new" class="px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+            + Compose Email
+        </a>
+
+    </div>
+
+
+    <!-- Email Statistics -->
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Total
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ emails|length }}
+            </p>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Unread
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{
+                emails
+                |selectattr("is_read", "equalto", false)
+                |list
+                |length
+                }}
+            </p>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Sent
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{
+                emails
+                |selectattr("folder", "equalto", "sent")
+                |list
+                |length
+                }}
+            </p>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Drafts
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{
+                emails
+                |selectattr("folder", "equalto", "draft")
+                |list
+                |length
+                }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Email Navigation -->
+    <div class="flex flex-wrap gap-2">
+
+        <a href="/email" class="px-4 py-2.5 rounded-xl bg-violet-600 text-sm font-medium">
+            Inbox
+        </a>
+
+        <a href="/email/sent"
+            class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-sm transition">
+            Sent
+        </a>
+
+        <a href="/email/drafts"
+            class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-sm transition">
+            Drafts
+        </a>
+
+        <a href="/email/starred"
+            class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-sm transition">
+            ⭐ Starred
+        </a>
+
+    </div>
+
+
+    <!-- Search -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+
+        <form method="get" action="/email" class="flex flex-col sm:flex-row gap-3">
+
+            <div class="relative flex-1">
+
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600">
+                    🔍
+                </span>
+
+                <input type="text" name="q" value="{{ request.query_params.get('q', '') if request else '' }}"
+                    placeholder="Search emails..."
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-11 pr-4 py-3 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition">
+
+            </div>
+
+            <button type="submit" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-medium transition">
+                Search
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Email List -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+        {% if emails %}
+
+        <div class="divide-y divide-slate-800">
+
+            {% for email in emails %}
+
+            <a href="/email/{{ email.id }}" class="
+                block
+                p-5
+                hover:bg-slate-800/30
+                transition
+                {% if not email.is_read %}
+                    bg-violet-600/5
+                {% endif %}
+            ">
+
+                <div class="flex items-start gap-4">
+
+                    <!-- Avatar -->
+                    <div class="
+                        w-11
+                        h-11
+                        rounded-full
+                        bg-violet-600/10
+                        text-violet-400
+                        flex
+                        items-center
+                        justify-center
+                        font-semibold
+                        flex-shrink-0
+                    ">
+                        {% if email.sender_name %}
+                        {{ email.sender_name[0]|upper }}
+                        {% elif email.sender_email %}
+                        {{ email.sender_email[0]|upper }}
+                        {% else %}
+                        ?
+                        {% endif %}
+                    </div>
+
+
+                    <!-- Email Content -->
+                    <div class="flex-1 min-w-0">
+
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+
+                            <div class="flex items-center gap-2 min-w-0">
+
+                                <span class="
+                                    truncate
+                                    {% if not email.is_read %}
+                                        font-bold text-slate-100
+                                    {% else %}
+                                        font-medium text-slate-300
+                                    {% endif %}
+                                ">
+                                    {% if email.sender_name %}
+                                    {{ email.sender_name }}
+                                    {% else %}
+                                    {{ email.sender_email }}
+                                    {% endif %}
+                                </span>
+
+
+                                {% if not email.is_read %}
+
+                                <span class="w-2 h-2 rounded-full bg-violet-500 flex-shrink-0"></span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <span class="text-xs text-slate-600 flex-shrink-0">
+
+                                {% if email.created_at %}
+
+                                {% if email.created_at.strftime("%Y-%m-%d") == today.strftime("%Y-%m-%d") %}
+                                {{ email.created_at.strftime("%H:%M") }}
+                                {% else %}
+                                {{ email.created_at.strftime("%d %b %Y") }}
+                                {% endif %}
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Subject -->
+                        <h2 class="
+                            mt-1
+                            truncate
+                            {% if not email.is_read %}
+                                font-semibold text-slate-100
+                            {% else %}
+                                text-slate-400
+                            {% endif %}
+                        ">
+                            {% if email.subject %}
+                            {{ email.subject }}
+                            {% else %}
+                            (No Subject)
+                            {% endif %}
+                        </h2>
+
+
+                        <!-- Preview -->
+                        {% if email.body %}
+
+                        <p class="text-sm text-slate-600 mt-1 truncate">
+                            {{ email.body|striptags|truncate(140, true, "...") }}
+                        </p>
+
+                        {% endif %}
+
+
+                        <!-- Metadata -->
+                        <div class="flex flex-wrap gap-2 mt-3">
+
+                            {% if email.company_id and email.company_id in company_map %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-violet-600/10 text-violet-300 text-xs">
+                                🏢 {{ company_map[email.company_id] }}
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if email.contact_id and email.contact_id in contact_map %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+                                👤 {{ contact_map[email.contact_id] }}
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if email.has_attachments %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+                                📎 Attachment
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if email.is_starred %}
+
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-300 text-xs">
+                                ⭐ Starred
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="hidden sm:flex items-center gap-2">
+
+                        {% if email.is_starred %}
+
+                        <form method="post" action="/email/{{ email.id }}/star" onclick="event.stopPropagation();">
+
+                            <button type="submit" class="w-9 h-9 rounded-lg hover:bg-slate-800 text-amber-400"
+                                title="Unstar">
+                                ★
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        <form method="post" action="/email/{{ email.id }}/star" onclick="event.stopPropagation();">
+
+                            <button type="submit"
+                                class="w-9 h-9 rounded-lg hover:bg-slate-800 text-slate-600 hover:text-amber-400"
+                                title="Star">
+                                ☆
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+
+                        <form method="post" action="/email/{{ email.id }}/delete"
+                            onclick="event.stopPropagation(); return confirm('Delete this email?');">
+
+                            <button type="submit"
+                                class="w-9 h-9 rounded-lg hover:bg-red-500/10 text-slate-600 hover:text-red-400"
+                                title="Delete">
+                                🗑
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- Pagination -->
+        {% if pagination %}
+
+        <div class="flex items-center justify-between p-5 border-t border-slate-800">
+
+            <span class="text-sm text-slate-500">
+                Page {{ pagination.page }} of {{ pagination.pages }}
+            </span>
+
+            <div class="flex gap-2">
+
+                {% if pagination.has_previous %}
+
+                <a href="/email?page={{ pagination.page - 1 }}"
+                    class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm">
+                    ← Previous
+                </a>
+
+                {% endif %}
+
+
+                {% if pagination.has_next %}
+
+                <a href="/email?page={{ pagination.page + 1 }}"
+                    class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm">
+                    Next →
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="py-20 text-center">
+
+            <div class="text-5xl">
+                ✉️
+            </div>
+
+            <h2 class="text-xl font-semibold mt-4">
+                No emails yet
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-2">
+                Your inbox is empty.
+            </p>
+
+            <a href="/email/new"
+                class="inline-flex mt-6 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                + Compose Email
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+    ```
+
+</div>
+
+{% endblock %}
