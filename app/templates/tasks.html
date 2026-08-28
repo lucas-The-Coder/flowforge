@@ -12,6 +12,7 @@ Tasks
 Manage work across your business
 {% endblock %}
 
+
 {% block content %}
 
 <div class="space-y-6">
@@ -20,24 +21,19 @@ Manage work across your business
 
         <div>
 
-            <p class="text-sm text-slate-500 mb-2">
-                Operations
-            </p>
-
-            <h1 class="text-3xl font-bold tracking-tight">
+            <h1 class="text-3xl font-bold">
                 Tasks
             </h1>
 
-            <p class="text-slate-400 mt-2">
-                Keep important work visible and moving.
+            <p class="text-slate-500 mt-2">
+                Track work, deadlines and priorities.
             </p>
 
         </div>
 
-        <a href="/tasks/new"
-            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition shadow-lg shadow-violet-900/20">
-            <span>+</span>
-            New task
+
+        <a href="/tasks/new" class="px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+            + New Task
         </a>
 
     </div>
@@ -65,7 +61,12 @@ Manage work across your business
             </p>
 
             <p class="text-3xl font-bold mt-2">
-                {{ tasks|selectattr("status", "equalto", "todo")|list|length }}
+                {{
+                tasks
+                |selectattr("status", "equalto", "todo")
+                |list
+                |length
+                }}
             </p>
 
         </div>
@@ -78,7 +79,12 @@ Manage work across your business
             </p>
 
             <p class="text-3xl font-bold mt-2">
-                {{ tasks|selectattr("status", "equalto", "in_progress")|list|length }}
+                {{
+                tasks
+                |selectattr("status", "equalto", "in_progress")
+                |list
+                |length
+                }}
             </p>
 
         </div>
@@ -91,7 +97,12 @@ Manage work across your business
             </p>
 
             <p class="text-3xl font-bold mt-2">
-                {{ tasks|selectattr("status", "equalto", "done")|list|length }}
+                {{
+                tasks
+                |selectattr("status", "equalto", "done")
+                |list
+                |length
+                }}
             </p>
 
         </div>
@@ -107,51 +118,41 @@ Manage work across your business
 
             {% for task in tasks %}
 
-            <div class="p-5 sm:p-6 hover:bg-slate-800/30 transition">
+            <div class="p-5 hover:bg-slate-800/30 transition">
 
-                <div class="flex flex-col lg:flex-row lg:items-start gap-5">
+                <div class="flex flex-col xl:flex-row xl:items-center gap-4">
 
                     <div class="flex-1 min-w-0">
 
-                        <div class="flex items-start gap-3">
-
-                            <div class="mt-1 w-3 h-3 rounded-full flex-shrink-0
-                                {% if task.priority == 4 %}
-                                    bg-red-500
-                                {% elif task.priority == 3 %}
-                                    bg-amber-500
-                                {% elif task.priority == 2 %}
-                                    bg-blue-500
-                                {% else %}
-                                    bg-slate-500
-                                {% endif %}
-                            "></div>
-
-                            <div class="min-w-0">
-
-                                <h2 class="font-semibold text-lg">
-                                    {{ task.title }}
-                                </h2>
-
-                                {% if task.description %}
-
-                                <p class="text-sm text-slate-500 mt-2 leading-6">
-                                    {{ task.description }}
-                                </p>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
+                        <h2 class="font-semibold text-lg">
+                            {{ task.title }}
+                        </h2>
 
 
-                        <div class="flex flex-wrap items-center gap-2 mt-4">
+                        {% if task.description %}
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            {{ task.description }}
+                        </p>
+
+                        {% endif %}
+
+
+                        <div class="flex flex-wrap gap-2 mt-3">
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+                                {{ priorities[task.priority] }}
+                            </span>
+
+
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+                                {{ statuses[task.status] }}
+                            </span>
+
 
                             {% if task.company_id and task.company_id in company_map %}
 
-                            <span
-                                class="px-2.5 py-1 rounded-lg bg-violet-600/10 border border-violet-500/10 text-xs text-violet-300">
+                            <span class="px-2.5 py-1 rounded-lg bg-violet-600/10 text-xs text-violet-300">
                                 🏢 {{ company_map[task.company_id] }}
                             </span>
 
@@ -160,28 +161,21 @@ Manage work across your business
 
                             {% if task.contact_id and task.contact_id in contact_map %}
 
-                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs text-slate-400">
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
                                 👤 {{ contact_map[task.contact_id] }}
                             </span>
 
                             {% endif %}
 
 
-                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs text-slate-500">
-                                {{ priorities[task.priority] }}
-                            </span>
-
-
                             {% if task.due_date %}
 
-                            <span class="px-2.5 py-1 rounded-lg text-xs
-                                {% if task.due_date < today and task.status != 'done' %}
-                                    bg-red-500/10 text-red-400
-                                {% else %}
-                                    bg-slate-800 text-slate-500
-                                {% endif %}
-                            ">
-                                📅 {{ task.due_date.strftime("%d %b %Y") }}
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs">
+
+                                📅
+
+                                {{ task.due_date.strftime("%d %b %Y") }}
+
                             </span>
 
                             {% endif %}
@@ -191,36 +185,22 @@ Manage work across your business
                     </div>
 
 
-                    <div class="flex flex-col sm:flex-row lg:flex-col gap-3 lg:w-48">
+                    <div class="flex flex-wrap gap-2">
+
+                        <a href="/tasks/{{ task.id }}/edit" class="px-4 py-2.5 rounded-xl bg-slate-800 text-sm">
+                            Edit
+                        </a>
+
 
                         <form method="post" action="/tasks/{{ task.id }}/status">
 
                             <select name="status_name" onchange="this.form.submit()"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-violet-500">
+                                class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm">
 
-                                {% for status_name, status_label in statuses.items() %}
+                                {% for key, label in statuses.items() %}
 
-                                <option value="{{ status_name }}" {% if task.status==status_name %}selected{% endif %}>
-                                    {{ status_label }}
-                                </option>
-
-                                {% endfor %}
-
-                            </select>
-
-                        </form>
-
-
-                        <form method="post" action="/tasks/{{ task.id }}/priority">
-
-                            <select name="priority" onchange="this.form.submit()"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-violet-500">
-
-                                {% for priority_value, priority_label in priorities.items() %}
-
-                                <option value="{{ priority_value }}" {% if task.priority==priority_value %}selected{%
-                                    endif %}>
-                                    {{ priority_label }}
+                                <option value="{{ key }}" {% if task.status==key %} selected {% endif %}>
+                                    {{ label }}
                                 </option>
 
                                 {% endfor %}
@@ -233,8 +213,7 @@ Manage work across your business
                         <form method="post" action="/tasks/{{ task.id }}/delete"
                             onsubmit="return confirm('Delete this task?');">
 
-                            <button type="submit"
-                                class="w-full px-3 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-sm transition">
+                            <button class="px-4 py-2.5 rounded-xl bg-red-500/10 text-red-400 text-sm">
                                 Delete
                             </button>
 
@@ -252,24 +231,18 @@ Manage work across your business
 
         {% else %}
 
-        <div class="py-20 px-6 text-center">
+        <div class="py-20 text-center">
 
-            <div
-                class="w-16 h-16 mx-auto rounded-2xl bg-violet-600/10 border border-violet-500/10 flex items-center justify-center text-3xl mb-5">
+            <div class="text-4xl">
                 ✅
             </div>
 
-            <h2 class="text-xl font-semibold">
+            <h2 class="text-xl font-semibold mt-4">
                 No tasks yet
             </h2>
 
-            <p class="text-slate-500 mt-2">
-                Create your first task to start managing your workload.
-            </p>
-
-            <a href="/tasks/new"
-                class="inline-flex items-center gap-2 px-5 py-3 mt-6 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
-                + New task
+            <a href="/tasks/new" class="inline-flex mt-6 px-5 py-3 rounded-xl bg-violet-600">
+                + New Task
             </a>
 
         </div>

@@ -1,74 +1,63 @@
 {% extends "base.html" %}
 
 {% block title %}
-New Task | FlowForge
+{% if task %}Edit Task{% else %}New Task{% endif %}
+| FlowForge
 {% endblock %}
 
 {% block header %}
-New Task
+{% if task %}Edit Task{% else %}New Task{% endif %}
 {% endblock %}
 
 {% block header_subtitle %}
-Create a task
+Task management
 {% endblock %}
+
 
 {% block content %}
 
 <div class="max-w-3xl">
 
-    <div class="mb-6">
-
-        <a href="/tasks" class="text-sm text-violet-400 hover:text-violet-300 transition">
-            ← Back to tasks
-        </a>
-
-    </div>
+    <a href="/tasks" class="text-sm text-violet-400">
+        ← Back to tasks
+    </a>
 
 
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 mt-6">
 
-        <div class="mb-8">
+        <form method="post" action="{% if task %}/tasks/{{ task.id }}/edit{% else %}/tasks{% endif %}"
+            class="space-y-6">
 
-            <h1 class="text-2xl font-bold">
-                Create task
-            </h1>
-
-            <p class="text-slate-500 mt-2">
-                Add work for your team or business.
-            </p>
-
-        </div>
-
-
-        <form method="post" action="/tasks" class="space-y-6">
 
             <div>
 
-                <label for="title" class="block text-sm font-medium mb-2">
+                <label class="block text-sm font-medium mb-2">
                     Task title
                 </label>
 
-                <input id="title" name="title" type="text" required maxlength="255" placeholder="Follow up with client"
-                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+                <input name="title" type="text" required maxlength="255" value="{{ task.title if task else '' }}"
+                    placeholder="Follow up with client"
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5">
 
             </div>
 
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
+
                 <div>
 
-                    <label for="priority" class="block text-sm font-medium mb-2">
+                    <label class="block text-sm font-medium mb-2">
                         Priority
                     </label>
 
-                    <select id="priority" name="priority"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+                    <select name="priority" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5">
 
-                        {% for priority_value, priority_label in priorities.items() %}
+                        {% for value, label in priorities.items() %}
 
-                        <option value="{{ priority_value }}" {% if priority_value==2 %}selected{% endif %}>
-                            {{ priority_label }}
+                        <option value="{{ value }}" {% if task and task.priority==value %} selected {% elif not task and
+                            value==2 %} selected {% endif %}>
+                            {{ label }}
                         </option>
 
                         {% endfor %}
@@ -80,12 +69,13 @@ Create a task
 
                 <div>
 
-                    <label for="due_date" class="block text-sm font-medium mb-2">
+                    <label class="block text-sm font-medium mb-2">
                         Due date
                     </label>
 
-                    <input id="due_date" name="due_date" type="date"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+                    <input name="due_date" type="date"
+                        value="{% if task and task.due_date %}{{ task.due_date.isoformat() }}{% endif %}"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5">
 
                 </div>
 
@@ -94,14 +84,15 @@ Create a task
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
+
                 <div>
 
-                    <label for="company_id" class="block text-sm font-medium mb-2">
+                    <label class="block text-sm font-medium mb-2">
                         Company
                     </label>
 
-                    <select id="company_id" name="company_id"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+                    <select name="company_id"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5">
 
                         <option value="">
                             No company
@@ -109,7 +100,8 @@ Create a task
 
                         {% for company in companies %}
 
-                        <option value="{{ company.id }}">
+                        <option value="{{ company.id }}" {% if task and task.company_id==company.id %} selected {% endif
+                            %}>
                             {{ company.name }}
                         </option>
 
@@ -122,12 +114,12 @@ Create a task
 
                 <div>
 
-                    <label for="contact_id" class="block text-sm font-medium mb-2">
+                    <label class="block text-sm font-medium mb-2">
                         Contact
                     </label>
 
-                    <select id="contact_id" name="contact_id"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+                    <select name="contact_id"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5">
 
                         <option value="">
                             No contact
@@ -135,8 +127,10 @@ Create a task
 
                         {% for contact in contacts %}
 
-                        <option value="{{ contact.id }}">
-                            {{ contact.first_name }} {{ contact.last_name }}
+                        <option value="{{ contact.id }}" {% if task and task.contact_id==contact.id %} selected {% endif
+                            %}>
+                            {{ contact.first_name }}
+                            {{ contact.last_name }}
                         </option>
 
                         {% endfor %}
@@ -150,25 +144,28 @@ Create a task
 
             <div>
 
-                <label for="description" class="block text-sm font-medium mb-2">
+                <label class="block text-sm font-medium mb-2">
                     Description
                 </label>
 
-                <textarea id="description" name="description" rows="6" placeholder="Describe what needs to be done..."
-                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500 resize-none"></textarea>
+                <textarea name="description" rows="6" placeholder="Describe the work..."
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5">{% if task and task.description %}{{ task.description }}{% endif %}</textarea>
 
             </div>
 
 
-            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+            <div class="flex gap-3">
 
-                <button type="submit"
-                    class="px-6 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                <button type="submit" class="px-6 py-3.5 rounded-xl bg-violet-600">
+                    {% if task %}
+                    Save changes
+                    {% else %}
                     Create task
+                    {% endif %}
                 </button>
 
-                <a href="/tasks"
-                    class="px-6 py-3.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-center transition">
+
+                <a href="/tasks" class="px-6 py-3.5 rounded-xl border border-slate-700">
                     Cancel
                 </a>
 

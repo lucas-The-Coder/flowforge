@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,69 +13,40 @@
         {% block title %}FlowForge{% endblock %}
     </title>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
-
-    <!-- FlowForge CSS -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        flow: {
-                            50: "#f5f3ff",
-                            100: "#ede9fe",
-                            200: "#ddd6fe",
-                            300: "#c4b5fd",
-                            400: "#a78bfa",
-                            500: "#8b5cf6",
-                            600: "#7c3aed",
-                            700: "#6d28d9",
-                            800: "#5b21b6",
-                            900: "#4c1d95"
-                        }
-                    }
-                }
-            }
-        };
-    </script>
+    {% block head %}
+    {% endblock %}
 
-    {% block head %}{% endblock %}
 </head>
 
 
 <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
 
-    {% block body %}
 
     <div class="min-h-screen flex">
 
-        <!-- ===================================================== -->
+
+        <!-- ================================================= -->
         <!-- DESKTOP SIDEBAR -->
-        <!-- ===================================================== -->
+        <!-- ================================================= -->
 
         <aside class="hidden lg:flex lg:flex-col w-72 bg-slate-900 border-r border-slate-800">
 
-            <!-- Branding -->
             <div class="px-6 py-6 border-b border-slate-800">
 
-                <a href="/" class="flex items-center gap-3 group">
+                <a href="/" class="flex items-center gap-3">
 
                     <div
-                        class="w-11 h-11 rounded-xl bg-violet-600/15 border border-violet-500/25 flex items-center justify-center group-hover:bg-violet-600/25 transition">
-                        <span class="text-2xl">
-                            ⚡
-                        </span>
+                        class="w-11 h-11 rounded-xl bg-violet-600/15 border border-violet-500/25 flex items-center justify-center">
+                        ⚡
                     </div>
 
                     <div>
 
-                        <h1 class="text-xl font-bold tracking-tight">
+                        <h1 class="text-xl font-bold">
                             FlowForge
                         </h1>
 
@@ -89,107 +61,153 @@
             </div>
 
 
-            <!-- Navigation -->
             <nav class="flex-1 p-4 overflow-y-auto">
 
-                <!-- Workspace -->
                 <p class="px-4 pt-2 pb-3 text-[11px] uppercase tracking-[0.16em] text-slate-600">
                     Workspace
                 </p>
 
-                <!-- Dashboard -->
                 <a href="/"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">📊</span>
-                    <span>Dashboard</span>
+                    <span class="w-5 text-center">
+                        📊
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
                 </a>
 
 
-                <!-- CRM -->
                 <p class="px-4 pt-6 pb-3 text-[11px] uppercase tracking-[0.16em] text-slate-600">
                     CRM
                 </p>
 
-                <!-- Companies -->
                 <a href="/companies"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">🏢</span>
-                    <span>Companies</span>
+                    <span class="w-5 text-center">
+                        🏢
+                    </span>
+
+                    <span>
+                        Companies
+                    </span>
                 </a>
 
-                <!-- Contacts -->
+
                 <a href="/contacts"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">👥</span>
-                    <span>Contacts</span>
+                    <span class="w-5 text-center">
+                        👥
+                    </span>
+
+                    <span>
+                        Contacts
+                    </span>
                 </a>
 
-                <!-- Sales Pipeline -->
+
                 <a href="/leads"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">💰</span>
-                    <span>Sales Pipeline</span>
+                    <span class="w-5 text-center">
+                        💰
+                    </span>
+
+                    <span>
+                        Sales Pipeline
+                    </span>
                 </a>
 
 
-                <!-- Operations -->
                 <p class="px-4 pt-6 pb-3 text-[11px] uppercase tracking-[0.16em] text-slate-600">
                     Operations
                 </p>
 
-                <!-- Tasks -->
+
+                <a href="/operations"
+                    class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <span class="w-5 text-center">
+                        🧭
+                    </span>
+
+                    <span>
+                        Overview
+                    </span>
+                </a>
+
+
                 <a href="/tasks"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">✅</span>
-                    <span>Tasks</span>
+                    <span class="w-5 text-center">
+                        ✅
+                    </span>
+
+                    <span>
+                        Tasks
+                    </span>
                 </a>
 
-                <!-- Calendar -->
+
                 <a href="/calendar"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">📅</span>
-                    <span>Calendar</span>
+                    <span class="w-5 text-center">
+                        📅
+                    </span>
+
+                    <span>
+                        Calendar
+                    </span>
                 </a>
 
-                <!-- Emails -->
+
                 <a href="/emails"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">📧</span>
-                    <span>Emails</span>
+                    <span class="w-5 text-center">
+                        📧
+                    </span>
+
+                    <span>
+                        Emails
+                    </span>
                 </a>
 
-                <!-- Automations -->
+
                 <a href="/automations"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">⚙️</span>
-                    <span>Automations</span>
+                    <span class="w-5 text-center">
+                        ⚙️
+                    </span>
+
+                    <span>
+                        Automations
+                    </span>
                 </a>
 
-                <!-- Analytics -->
+
                 <a href="/analytics"
                     class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    <span class="w-5 text-center">📈</span>
-                    <span>Analytics</span>
+                    <span class="w-5 text-center">
+                        📈
+                    </span>
+
+                    <span>
+                        Analytics
+                    </span>
                 </a>
 
             </nav>
 
 
-            <!-- ================================================= -->
-            <!-- USER AREA -->
-            <!-- ================================================= -->
-
             {% if user is defined %}
 
             <div class="p-4 border-t border-slate-800">
 
-                <!-- User -->
                 <div class="flex items-center gap-3 p-3 mb-3 rounded-xl bg-slate-800/50">
 
-                    <div
-                        class="w-10 h-10 flex-shrink-0 rounded-full bg-violet-600 flex items-center justify-center font-semibold text-white">
+                    <div class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center font-semibold">
                         {{ user.full_name[0]|upper }}
                     </div>
+
 
                     <div class="min-w-0 flex-1">
 
@@ -206,7 +224,6 @@
                 </div>
 
 
-                <!-- Workspace -->
                 {% if workspace is defined %}
 
                 <div class="px-3 py-2 mb-3 rounded-lg bg-slate-950 border border-slate-800">
@@ -224,13 +241,19 @@
                 {% endif %}
 
 
-                <!-- Logout -->
                 <form method="post" action="/auth/logout">
 
                     <button type="submit"
                         class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
-                        <span class="w-5 text-center">↪</span>
-                        <span>Sign out</span>
+
+                        <span class="w-5 text-center">
+                            ↪
+                        </span>
+
+                        <span>
+                            Sign out
+                        </span>
+
                     </button>
 
                 </form>
@@ -242,19 +265,16 @@
         </aside>
 
 
-        <!-- ===================================================== -->
+        <!-- ================================================= -->
         <!-- MAIN -->
-        <!-- ===================================================== -->
+        <!-- ================================================= -->
 
         <div class="flex-1 min-w-0 flex flex-col">
 
 
-            <!-- ================================================= -->
-            <!-- DESKTOP HEADER -->
-            <!-- ================================================= -->
+            <!-- Desktop header -->
 
-            <header
-                class="hidden lg:flex h-20 flex-shrink-0 px-8 border-b border-slate-800 items-center justify-between bg-slate-950/90 backdrop-blur">
+            <header class="hidden lg:flex h-20 px-8 border-b border-slate-800 items-center justify-between">
 
                 <div>
 
@@ -277,58 +297,41 @@
                 </div>
 
 
-                <div class="flex items-center gap-4">
+                {% if user is defined %}
 
-                    <!-- Notifications -->
-                    <button type="button"
-                        class="relative w-10 h-10 flex items-center justify-center rounded-xl border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-900 transition"
-                        title="Notifications">
-                        🔔
-                    </button>
+                <div class="flex items-center gap-3">
 
+                    <div class="text-right">
 
-                    {% if user is defined %}
+                        <p class="text-sm font-medium">
+                            {{ user.full_name }}
+                        </p>
 
-                    <div class="flex items-center gap-3 pl-4 border-l border-slate-800">
+                        {% if workspace is defined %}
 
-                        <div class="text-right">
+                        <p class="text-xs text-slate-500">
+                            {{ workspace.name }}
+                        </p>
 
-                            <p class="text-sm font-medium">
-                                {{ user.full_name }}
-                            </p>
-
-                            <p class="text-xs text-slate-500">
-
-                                {% if workspace is defined %}
-                                {{ workspace.name }}
-                                {% else %}
-                                FlowForge Workspace
-                                {% endif %}
-
-                            </p>
-
-                        </div>
-
-
-                        <div
-                            class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center font-semibold">
-                            {{ user.full_name[0]|upper }}
-                        </div>
+                        {% endif %}
 
                     </div>
 
-                    {% endif %}
+
+                    <div class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center font-semibold">
+                        {{ user.full_name[0]|upper }}
+                    </div>
 
                 </div>
+
+                {% endif %}
 
             </header>
 
 
-            <!-- ================================================= -->
-            <!-- MOBILE HEADER -->
-            <!-- ================================================= -->
+            <!-- Mobile header -->
 
-            <header class="lg:hidden flex-shrink-0 px-4 py-4 border-b border-slate-800 bg-slate-950">
+            <header class="lg:hidden px-4 py-4 border-b border-slate-800">
 
                 <div class="flex items-center justify-between">
 
@@ -356,32 +359,8 @@
 
                     {% if user is defined %}
 
-                    <div class="flex items-center gap-3">
-
-                        <div class="hidden sm:block text-right">
-
-                            <p class="text-sm font-medium">
-                                {{ user.full_name }}
-                            </p>
-
-                            <p class="text-xs text-slate-500">
-
-                                {% if workspace is defined %}
-                                {{ workspace.name }}
-                                {% else %}
-                                Workspace
-                                {% endif %}
-
-                            </p>
-
-                        </div>
-
-
-                        <div
-                            class="w-9 h-9 rounded-full bg-violet-600 flex items-center justify-center font-semibold text-sm">
-                            {{ user.full_name[0]|upper }}
-                        </div>
-
+                    <div class="w-9 h-9 rounded-full bg-violet-600 flex items-center justify-center font-semibold">
+                        {{ user.full_name[0]|upper }}
                     </div>
 
                     {% endif %}
@@ -391,65 +370,57 @@
             </header>
 
 
-            <!-- ================================================= -->
-            <!-- MOBILE NAVIGATION -->
-            <!-- ================================================= -->
+            <!-- Mobile navigation -->
 
             {% if user is defined %}
 
-            <nav class="lg:hidden flex-shrink-0 border-b border-slate-800 bg-slate-900/90 overflow-x-auto">
+            <nav class="lg:hidden border-b border-slate-800 bg-slate-900 overflow-x-auto">
 
-                <div class="flex items-center gap-1 p-2 min-w-max">
+                <div class="flex gap-1 p-2 min-w-max">
 
-                    <a href="/"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         📊 Dashboard
                     </a>
 
-                    <a href="/companies"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/companies" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         🏢 Companies
                     </a>
 
-                    <a href="/contacts"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/contacts" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         👥 Contacts
                     </a>
 
-                    <a href="/leads"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/leads" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         💰 Pipeline
                     </a>
 
-                    <a href="/tasks"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/operations" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
+                        🧭 Operations
+                    </a>
+
+                    <a href="/tasks" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         ✅ Tasks
                     </a>
 
-                    <a href="/calendar"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/calendar" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         📅 Calendar
                     </a>
 
-                    <a href="/emails"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/emails" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         📧 Emails
                     </a>
 
-                    <a href="/automations"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/automations" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         ⚙️ Automations
                     </a>
 
-                    <a href="/analytics"
-                        class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <a href="/analytics" class="px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
                         📈 Analytics
                     </a>
 
-                    <form method="post" action="/auth/logout" class="inline">
+                    <form method="post" action="/auth/logout">
 
-                        <button type="submit"
-                            class="px-4 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                        <button class="px-4 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-slate-800">
                             ↪ Sign out
                         </button>
 
@@ -462,11 +433,9 @@
             {% endif %}
 
 
-            <!-- ================================================= -->
-            <!-- PAGE CONTENT -->
-            <!-- ================================================= -->
+            <!-- Page -->
 
-            <main class="flex-1 min-w-0">
+            <main class="flex-1">
 
                 <div class="p-4 sm:p-6 lg:p-8">
 
@@ -478,13 +447,11 @@
             </main>
 
 
-            <!-- ================================================= -->
-            <!-- FOOTER -->
-            <!-- ================================================= -->
+            <!-- Footer -->
 
             <footer class="px-4 sm:px-6 lg:px-8 py-4 border-t border-slate-900">
 
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <div class="flex justify-between">
 
                     <p class="text-xs text-slate-700">
                         FlowForge Business Automation Platform
@@ -502,11 +469,6 @@
 
     </div>
 
-    {% endblock %}
-
-
-    <!-- FlowForge JavaScript -->
-    <script src="{{ url_for('static', path='js/app.js') }}"></script>
 
     {% block scripts %}
     {% endblock %}

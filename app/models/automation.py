@@ -18,7 +18,10 @@ class Automation(Base):
 
     workspace_id: Mapped[str] = mapped_column(
         String(36),
-        ForeignKey("workspaces.id", ondelete="CASCADE"),
+        ForeignKey(
+            "workspaces.id",
+            ondelete="CASCADE",
+        ),
         nullable=False,
         index=True,
     )

@@ -18,21 +18,30 @@ class CalendarEvent(Base):
 
     workspace_id: Mapped[str] = mapped_column(
         String(36),
-        ForeignKey("workspaces.id", ondelete="CASCADE"),
+        ForeignKey(
+            "workspaces.id",
+            ondelete="CASCADE",
+        ),
         nullable=False,
         index=True,
     )
 
     company_id: Mapped[str | None] = mapped_column(
         String(36),
-        ForeignKey("companies.id", ondelete="SET NULL"),
+        ForeignKey(
+            "companies.id",
+            ondelete="SET NULL",
+        ),
         nullable=True,
         index=True,
     )
 
     contact_id: Mapped[str | None] = mapped_column(
         String(36),
-        ForeignKey("contacts.id", ondelete="SET NULL"),
+        ForeignKey(
+            "contacts.id",
+            ondelete="SET NULL",
+        ),
         nullable=True,
         index=True,
     )

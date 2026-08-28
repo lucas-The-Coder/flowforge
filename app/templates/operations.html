@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}
+Operations | FlowForge
+{% endblock %}
+
+{% block header %}
+Operations
+{% endblock %}
+
+{% block header_subtitle %}
+Run your business from one place
+{% endblock %}
+
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <div>
+
+        <h1 class="text-3xl font-bold">
+            Operations
+        </h1>
+
+        <p class="text-slate-500 mt-2">
+            Manage your business activity.
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-cols-2 xl:grid-cols-5 gap-4">
+
+        <a href="/tasks"
+            class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-violet-500/40 transition">
+
+            <p class="text-sm text-slate-500">
+                Open Tasks
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ open_task_count }}
+            </p>
+
+        </a>
+
+
+        <a href="/calendar"
+            class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-violet-500/40 transition">
+
+            <p class="text-sm text-slate-500">
+                Events
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ event_count }}
+            </p>
+
+        </a>
+
+
+        <a href="/emails"
+            class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-violet-500/40 transition">
+
+            <p class="text-sm text-slate-500">
+                Emails
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ email_count }}
+            </p>
+
+        </a>
+
+
+        <a href="/automations"
+            class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-violet-500/40 transition">
+
+            <p class="text-sm text-slate-500">
+                Automations
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ automation_count }}
+            </p>
+
+        </a>
+
+
+        <a href="/leads"
+            class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-violet-500/40 transition">
+
+            <p class="text-sm text-slate-500">
+                Leads
+            </p>
+
+            <p class="text-3xl font-bold mt-2">
+                {{ lead_count }}
+            </p>
+
+        </a>
+
+    </div>
+
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+
+        <a href="/tasks/new" class="p-5 bg-violet-600 rounded-2xl hover:bg-violet-500 transition">
+            <div class="text-2xl">✅</div>
+
+            <h2 class="font-semibold mt-4">
+                Create Task
+            </h2>
+        </a>
+
+
+        <a href="/calendar/new"
+            class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-violet-500/40 transition">
+            <div class="text-2xl">📅</div>
+
+            <h2 class="font-semibold mt-4">
+                Schedule Event
+            </h2>
+        </a>
+
+
+        <a href="/emails/new"
+            class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-violet-500/40 transition">
+            <div class="text-2xl">📧</div>
+
+            <h2 class="font-semibold mt-4">
+                Compose Email
+            </h2>
+        </a>
+
+
+        <a href="/automations/new"
+            class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-violet-500/40 transition">
+            <div class="text-2xl">⚙️</div>
+
+            <h2 class="font-semibold mt-4">
+                New Automation
+            </h2>
+        </a>
+
+
+        <a href="/analytics"
+            class="p-5 bg-slate-900 border border-slate-800 rounded-2xl hover:border-violet-500/40 transition">
+            <div class="text-2xl">📈</div>
+
+            <h2 class="font-semibold mt-4">
+                Analytics
+            </h2>
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
