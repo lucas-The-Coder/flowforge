@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ company.name }} | FlowForge
+{% endblock %}
+
+{% block header %}
+{{ company.name }}
+{% endblock %}
+
+{% block header_subtitle %}
+Company details
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <div>
+        <a href="/companies" class="text-sm text-violet-400 hover:text-violet-300 transition">
+            ← Back to companies
+        </a>
+    </div>
+
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+
+            <div class="flex items-center gap-4">
+
+                <div
+                    class="w-16 h-16 rounded-2xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center text-2xl">
+                    🏢
+                </div>
+
+                <div>
+
+                    <h1 class="text-2xl font-bold">
+                        {{ company.name }}
+                    </h1>
+
+                    <p class="text-slate-500 mt-1">
+                        {{ company.industry or "Industry not specified" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="flex flex-wrap gap-3">
+
+                <a href="/companies/{{ company.id }}/edit"
+                    class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-sm font-medium">
+                    Edit company
+                </a>
+
+                <form method="post" action="/companies/{{ company.id }}/delete"
+                    onsubmit="return confirm('Delete this company? Contacts will remain but lose their company association.');">
+
+                    <button type="submit"
+                        class="px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition text-sm font-medium">
+                        Delete company
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+
+            <div>
+
+                <p class="text-xs uppercase tracking-wider text-slate-600">
+                    Website
+                </p>
+
+                {% if company.website %}
+
+                <a href="{{ company.website }}" target="_blank" rel="noopener noreferrer"
+                    class="text-violet-400 hover:text-violet-300 mt-2 inline-block break-all">
+                    {{ company.website }}
+                </a>
+
+                {% else %}
+
+                <p class="text-slate-500 mt-2">
+                    Not specified
+                </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <div>
+
+                <p class="text-xs uppercase tracking-wider text-slate-600">
+                    Email
+                </p>
+
+                {% if company.email %}
+
+                <a href="mailto:{{ company.email }}" class="text-violet-400 hover:text-violet-300 mt-2 inline-block">
+                    {{ company.email }}
+                </a>
+
+                {% else %}
+
+                <p class="text-slate-500 mt-2">
+                    Not specified
+                </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <div>
+
+                <p class="text-xs uppercase tracking-wider text-slate-600">
+                    Phone
+                </p>
+
+                {% if company.phone %}
+
+                <a href="tel:{{ company.phone }}" class="text-slate-300 hover:text-violet-400 mt-2 inline-block">
+                    {{ company.phone }}
+                </a>
+
+                {% else %}
+
+                <p class="text-slate-500 mt-2">
+                    Not specified
+                </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <div>
+
+                <p class="text-xs uppercase tracking-wider text-slate-600">
+                    Workspace
+                </p>
+
+                <p class="text-slate-300 mt-2">
+                    {{ workspace.name }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="mt-8 pt-8 border-t border-slate-800">
+
+            <p class="text-xs uppercase tracking-wider text-slate-600">
+                Notes
+            </p>
+
+            <p class="text-slate-400 mt-3 whitespace-pre-wrap leading-7">
+                {{ company.notes or "No notes have been added." }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+        <div
+            class="px-6 py-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+            <div>
+
+                <h2 class="text-lg font-semibold">
+                    Contacts
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    {{ contacts|length }}
+                    contact{% if contacts|length != 1 %}s{% endif %}
+                </p>
+
+            </div>
+
+            <a href="/contacts/new"
+                class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 font-medium transition">
+                + Add contact
+            </a>
+
+        </div>
+
+
+        {% if contacts %}
+
+        <div class="divide-y divide-slate-800">
+
+            {% for contact in contacts %}
+
+            <a href="/contacts/{{ contact.id }}" class="block px-6 py-5 hover:bg-slate-800/40 transition">
+
+                <div class="flex items-center gap-4">
+
+                    <div
+                        class="w-11 h-11 rounded-full bg-violet-600/20 border border-violet-500/20 flex items-center justify-center text-sm font-semibold text-violet-300">
+                        {{ contact.first_name[0]|upper }}{{ contact.last_name[0]|upper }}
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+
+                        <p class="font-medium">
+                            {{ contact.first_name }} {{ contact.last_name }}
+                        </p>
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            {{ contact.job_title or "Contact" }}
+                        </p>
+
+                    </div>
+
+                    <span class="text-slate-600">
+                        →
+                    </span>
+
+                </div>
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="py-14 px-6 text-center">
+
+            <div class="text-4xl mb-4">
+                👥
+            </div>
+
+            <p class="text-slate-400">
+                No contacts are associated with this company.
+            </p>
+
+            <a href="/contacts/new"
+                class="inline-flex items-center gap-2 mt-5 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                + Add contact
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

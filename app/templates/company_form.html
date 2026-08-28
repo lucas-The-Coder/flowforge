@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if company %}Edit Company{% else %}New Company{% endif %} | FlowForge
+{% endblock %}
+
+{% block header %}
+{% if company %}Edit Company{% else %}New Company{% endif %}
+{% endblock %}
+
+{% block header_subtitle %}
+{% if company %}
+Update company information
+{% else %}
+Add a company to your CRM
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl">
+
+    <div class="mb-6">
+
+        <a href="{% if company %}/companies/{{ company.id }}{% else %}/companies{% endif %}"
+            class="text-sm text-violet-400 hover:text-violet-300 transition">
+            ← Back
+        </a>
+
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+
+        <form method="post" action="{% if company %}/companies/{{ company.id }}/edit{% else %}/companies{% endif %}"
+            class="space-y-6">
+
+            <div>
+
+                <label for="name" class="block text-sm font-medium mb-2">
+                    Company name
+                </label>
+
+                <input id="name" name="name" type="text" required maxlength="255"
+                    value="{{ company.name if company else '' }}" placeholder="ABC Construction"
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <div>
+
+                    <label for="industry" class="block text-sm font-medium mb-2">
+                        Industry
+                    </label>
+
+                    <input id="industry" name="industry" type="text"
+                        value="{{ company.industry if company and company.industry else '' }}"
+                        placeholder="Construction"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+
+                </div>
+
+
+                <div>
+
+                    <label for="website" class="block text-sm font-medium mb-2">
+                        Website
+                    </label>
+
+                    <input id="website" name="website" type="url"
+                        value="{{ company.website if company and company.website else '' }}"
+                        placeholder="https://example.com"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+
+                </div>
+
+
+                <div>
+
+                    <label for="email" class="block text-sm font-medium mb-2">
+                        Email
+                    </label>
+
+                    <input id="email" name="email" type="email"
+                        value="{{ company.email if company and company.email else '' }}"
+                        placeholder="contact@example.com"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+
+                </div>
+
+
+                <div>
+
+                    <label for="phone" class="block text-sm font-medium mb-2">
+                        Phone
+                    </label>
+
+                    <input id="phone" name="phone" type="tel"
+                        value="{{ company.phone if company and company.phone else '' }}" placeholder="+27 00 000 0000"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500">
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <label for="notes" class="block text-sm font-medium mb-2">
+                    Notes
+                </label>
+
+                <textarea id="notes" name="notes" rows="6" placeholder="Add relevant information..."
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 outline-none focus:border-violet-500 resize-none">{{ company.notes if company and company.notes else '' }}</textarea>
+
+            </div>
+
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+
+                <button type="submit"
+                    class="px-6 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                    {% if company %}
+                    Save changes
+                    {% else %}
+                    Create company
+                    {% endif %}
+                </button>
+
+                <a href="{% if company %}/companies/{{ company.id }}{% else %}/companies{% endif %}"
+                    class="px-6 py-3.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-center transition">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

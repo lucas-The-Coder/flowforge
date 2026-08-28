@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}
+Contacts | FlowForge
+{% endblock %}
+
+{% block header %}
+Contacts
+{% endblock %}
+
+{% block header_subtitle %}
+Manage your customer contacts
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+        <div>
+            <h1 class="text-2xl font-bold">
+                Contacts
+            </h1>
+
+            <p class="text-slate-500 mt-1">
+                {{ contacts|length }}
+                contact{% if contacts|length != 1 %}s{% endif %}
+                in {{ workspace.name }}
+            </p>
+        </div>
+
+        <a href="/contacts/new"
+            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition shadow-lg shadow-violet-900/20">
+            <span class="text-lg">+</span>
+            Add contact
+        </a>
+
+    </div>
+
+    <form method="get" action="/contacts" class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+
+        <div class="flex flex-col sm:flex-row gap-3">
+
+            <div class="relative flex-1">
+
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600">
+                    🔎
+                </span>
+
+                <input type="search" name="search" value="{{ search }}" placeholder="Search contacts..."
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-11 pr-4 py-3 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20">
+
+            </div>
+
+            <button type="submit" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 transition font-medium">
+                Search
+            </button>
+
+            {% if search %}
+
+            <a href="/contacts"
+                class="px-5 py-3 rounded-xl border border-slate-700 hover:bg-slate-800 text-center transition">
+                Clear
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </form>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+        {% if contacts %}
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left">
+
+                <thead class="border-b border-slate-800">
+
+                    <tr>
+
+                        <th class="px-6 py-4 text-xs uppercase tracking-wider text-slate-500">
+                            Contact
+                        </th>
+
+                        <th class="px-6 py-4 text-xs uppercase tracking-wider text-slate-500">
+                            Company
+                        </th>
+
+                        <th class="px-6 py-4 text-xs uppercase tracking-wider text-slate-500">
+                            Job title
+                        </th>
+
+                        <th class="px-6 py-4 text-xs uppercase tracking-wider text-slate-500">
+                            Email
+                        </th>
+
+                        <th class="px-6 py-4 text-xs uppercase tracking-wider text-slate-500">
+                            Phone
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-slate-800">
+
+                    {% for contact in contacts %}
+
+                    <tr class="hover:bg-slate-800/40 transition">
+
+                        <td class="px-6 py-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <div
+                                    class="w-10 h-10 rounded-full bg-violet-600/20 border border-violet-500/20 flex items-center justify-center text-sm font-semibold text-violet-300">
+                                    {{ contact.first_name[0]|upper }}{{ contact.last_name[0]|upper }}
+                                </div>
+
+                                <div>
+
+                                    <a href="/contacts/{{ contact.id }}"
+                                        class="font-medium text-white hover:text-violet-400 transition">
+                                        {{ contact.first_name }} {{ contact.last_name }}
+                                    </a>
+
+                                    <p class="text-xs text-slate-600 mt-1">
+                                        Contact
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td class="px-6 py-4">
+
+                            {% if contact.company_id and contact.company_id in company_map %}
+
+                            <a href="/companies/{{ contact.company_id }}"
+                                class="text-violet-400 hover:text-violet-300 transition">
+                                {{ company_map[contact.company_id] }}
+                            </a>
+
+                            {% else %}
+
+                            <span class="text-slate-600">
+                                No company
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td class="px-6 py-4 text-slate-400">
+                            {{ contact.job_title or "Not specified" }}
+                        </td>
+
+                        <td class="px-6 py-4">
+
+                            {% if contact.email %}
+
+                            <a href="mailto:{{ contact.email }}"
+                                class="text-slate-400 hover:text-violet-400 transition">
+                                {{ contact.email }}
+                            </a>
+
+                            {% else %}
+
+                            <span class="text-slate-600">
+                                Not specified
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td class="px-6 py-4">
+
+                            {% if contact.phone %}
+
+                            <a href="tel:{{ contact.phone }}" class="text-slate-400 hover:text-violet-400 transition">
+                                {{ contact.phone }}
+                            </a>
+
+                            {% else %}
+
+                            <span class="text-slate-600">
+                                Not specified
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="py-20 px-6 text-center">
+
+            <div
+                class="w-16 h-16 mx-auto rounded-2xl bg-violet-600/10 border border-violet-500/10 flex items-center justify-center text-3xl mb-5">
+                👥
+            </div>
+
+            <h2 class="text-xl font-semibold">
+
+                {% if search %}
+                No contacts found
+                {% else %}
+                No contacts yet
+                {% endif %}
+
+            </h2>
+
+            <p class="text-slate-500 mt-2 max-w-md mx-auto">
+
+                {% if search %}
+                Try a different search term.
+                {% else %}
+                Add your first contact to start building your CRM.
+                {% endif %}
+
+            </p>
+
+            {% if not search %}
+
+            <a href="/contacts/new"
+                class="inline-flex items-center gap-2 px-5 py-3 mt-6 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                <span>+</span>
+                Add contact
+            </a>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

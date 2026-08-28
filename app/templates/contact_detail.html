@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ contact.first_name }} {{ contact.last_name }} | FlowForge
+{% endblock %}
+
+{% block header %}
+{{ contact.first_name }} {{ contact.last_name }}
+{% endblock %}
+
+{% block header_subtitle %}
+Contact details
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <div>
+        <a href="/contacts" class="text-sm text-violet-400 hover:text-violet-300 transition">
+            ← Back to contacts
+        </a>
+    </div>
+
+
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+        <div class="xl:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+
+                <div class="flex items-center gap-5">
+
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center text-xl font-bold text-violet-300">
+                        {{ contact.first_name[0]|upper }}{{ contact.last_name[0]|upper }}
+                    </div>
+
+                    <div>
+
+                        <h1 class="text-2xl font-bold">
+                            {{ contact.first_name }} {{ contact.last_name }}
+                        </h1>
+
+                        <p class="text-slate-500 mt-1">
+                            {{ contact.job_title or "Contact" }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex flex-wrap gap-3">
+
+                    <a href="/contacts/{{ contact.id }}/edit"
+                        class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-sm font-medium">
+                        Edit
+                    </a>
+
+                    <form method="post" action="/contacts/{{ contact.id }}/delete"
+                        onsubmit="return confirm('Delete this contact? This cannot be undone.');">
+
+                        <button type="submit"
+                            class="px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition text-sm font-medium">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider text-slate-600">
+                        Email
+                    </p>
+
+                    {% if contact.email %}
+
+                    <a href="mailto:{{ contact.email }}"
+                        class="text-violet-400 hover:text-violet-300 mt-2 inline-block break-all">
+                        {{ contact.email }}
+                    </a>
+
+                    {% else %}
+
+                    <p class="text-slate-500 mt-2">
+                        Not specified
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider text-slate-600">
+                        Phone
+                    </p>
+
+                    {% if contact.phone %}
+
+                    <a href="tel:{{ contact.phone }}" class="text-slate-300 hover:text-violet-400 mt-2 inline-block">
+                        {{ contact.phone }}
+                    </a>
+
+                    {% else %}
+
+                    <p class="text-slate-500 mt-2">
+                        Not specified
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider text-slate-600">
+                        Company
+                    </p>
+
+                    {% if company %}
+
+                    <a href="/companies/{{ company.id }}"
+                        class="text-violet-400 hover:text-violet-300 mt-2 inline-block">
+                        {{ company.name }}
+                    </a>
+
+                    {% else %}
+
+                    <p class="text-slate-500 mt-2">
+                        No company
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider text-slate-600">
+                        Job title
+                    </p>
+
+                    <p class="text-slate-300 mt-2">
+                        {{ contact.job_title or "Not specified" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-8 pt-8 border-t border-slate-800">
+
+                <p class="text-xs uppercase tracking-wider text-slate-600">
+                    Notes
+                </p>
+
+                <p class="text-slate-400 mt-3 whitespace-pre-wrap leading-7">
+                    {{ contact.notes or "No notes have been added." }}
+                </p>
+
+            </div>
+
+
+            <div class="mt-8 pt-8 border-t border-slate-800">
+
+                <p class="text-xs uppercase tracking-wider text-slate-600">
+                    Workspace
+                </p>
+
+                <p class="text-slate-400 mt-2">
+                    {{ workspace.name }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+            <h2 class="text-lg font-semibold">
+                Activity
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Communication and actions
+            </p>
+
+
+            <div class="mt-8 py-10 text-center">
+
+                <div
+                    class="w-14 h-14 mx-auto rounded-2xl bg-violet-600/10 border border-violet-500/10 flex items-center justify-center text-3xl">
+                    📋
+                </div>
+
+                <p class="text-slate-400 mt-5">
+                    No activity yet.
+                </p>
+
+                <p class="text-sm text-slate-600 mt-2 leading-6">
+                    Emails, meetings, tasks, notes, and automation events will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
