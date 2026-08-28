@@ -1,21 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-
 Analysis | FlowForge
-
 {% endblock %}
 
 {% block header %}
-
 Analysis
-
 {% endblock %}
 
 {% block header_subtitle %}
-
 Understand your business performance and productivity
-
 {% endblock %}
 
 {% block content %}
@@ -23,37 +17,24 @@ Understand your business performance and productivity
 <div class="space-y-6">
 
     ```
-    <!-- Page Header -->
+    <!-- Header -->
 
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
 
         <div>
-
             <h1 class="text-3xl font-bold">
-
                 Business Analysis
-
             </h1>
 
             <p class="text-slate-500 mt-2">
-
                 Monitor activity, productivity, communications and automation performance.
-
             </p>
-
         </div>
 
-
-        <div class="flex gap-2">
-
-            <button onclick="window.location.reload()"
-                class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold transition">
-
-                ↻ Refresh
-
-            </button>
-
-        </div>
+        <button type="button" onclick="window.location.reload()"
+            class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold transition">
+            ↻ Refresh
+        </button>
 
     </div>
 
@@ -62,141 +43,101 @@ Understand your business performance and productivity
 
     <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
 
-        <!-- Tasks -->
-
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
 
             <div class="flex items-center justify-between">
 
                 <p class="text-sm text-slate-500">
-
                     Tasks
-
                 </p>
 
                 <span class="text-xl">
-
                     ✓
-
                 </span>
 
             </div>
 
             <p class="text-3xl font-bold mt-2">
-
-                {{ total_tasks or 0 }}
-
+                {{ total_tasks|default(0) }}
             </p>
 
             <p class="text-xs text-slate-500 mt-2">
-
-                {{ completed_tasks or 0 }} completed
-
+                {{ completed_tasks|default(0) }} completed
             </p>
 
         </div>
 
-
-        <!-- Emails -->
 
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
 
             <div class="flex items-center justify-between">
 
                 <p class="text-sm text-slate-500">
-
                     Emails
-
                 </p>
 
                 <span class="text-xl">
-
                     ✉
-
                 </span>
 
             </div>
 
             <p class="text-3xl font-bold mt-2">
-
-                {{ total_emails or 0 }}
-
+                {{ total_emails|default(0) }}
             </p>
 
             <p class="text-xs text-slate-500 mt-2">
-
-                {{ emails_sent or 0 }} sent
-
+                {{ emails_sent|default(0) }} sent
             </p>
 
         </div>
 
-
-        <!-- Automations -->
 
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
 
             <div class="flex items-center justify-between">
 
                 <p class="text-sm text-slate-500">
-
                     Automations
-
                 </p>
 
                 <span class="text-xl">
-
                     ⚡
-
                 </span>
 
             </div>
 
             <p class="text-3xl font-bold mt-2">
-
-                {{ active_automations or 0 }}
-
+                {{ active_automations|default(0) }}
             </p>
 
             <p class="text-xs text-slate-500 mt-2">
-
-                {{ automation_runs or 0 }} total runs
-
+                {{ automation_runs|default(0) }} total runs
             </p>
 
         </div>
 
-
-        <!-- Contacts -->
 
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
 
             <div class="flex items-center justify-between">
 
                 <p class="text-sm text-slate-500">
-
                     Contacts
-
                 </p>
 
                 <span class="text-xl">
-
                     👥
-
                 </span>
 
             </div>
 
             <p class="text-3xl font-bold mt-2">
-
-                {{ total_contacts or 0 }}
-
+                {{ total_contacts|default(0) }}
             </p>
 
             <p class="text-xs text-slate-500 mt-2">
-
                 Across your business
-
             </p>
 
         </div>
@@ -204,9 +145,10 @@ Understand your business performance and productivity
     </div>
 
 
-    <!-- Productivity Overview -->
+    <!-- Performance -->
 
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
 
         <!-- Task Performance -->
 
@@ -217,29 +159,24 @@ Understand your business performance and productivity
                 <div>
 
                     <h2 class="text-lg font-semibold">
-
                         Task Performance
-
                     </h2>
 
                     <p class="text-sm text-slate-500 mt-1">
-
                         Current workload and completion progress.
-
                     </p>
 
                 </div>
 
                 <span class="text-2xl">
-
                     📊
-
                 </span>
 
             </div>
 
 
             <div class="space-y-5 mt-6">
+
 
                 <!-- Completed -->
 
@@ -248,23 +185,19 @@ Understand your business performance and productivity
                     <div class="flex justify-between text-sm mb-2">
 
                         <span>
-
                             Completed
-
                         </span>
 
                         <span class="text-slate-500">
-
-                            {{ completed_tasks or 0 }}
-
+                            {{ completed_tasks|default(0) }}
                         </span>
 
                     </div>
 
                     <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
 
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: {{ task_completion_rate or 0 }}%">
-                        </div>
+                        <div class="progress-bar h-full bg-emerald-500 rounded-full transition-all duration-500"
+                            data-width="{{ task_completion_rate|default(0) }}"></div>
 
                     </div>
 
@@ -278,23 +211,19 @@ Understand your business performance and productivity
                     <div class="flex justify-between text-sm mb-2">
 
                         <span>
-
                             In Progress
-
                         </span>
 
                         <span class="text-slate-500">
-
-                            {{ in_progress_tasks or 0 }}
-
+                            {{ in_progress_tasks|default(0) }}
                         </span>
 
                     </div>
 
                     <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
 
-                        <div class="h-full bg-violet-500 rounded-full" style="width: {{ task_progress_rate or 0 }}%">
-                        </div>
+                        <div class="progress-bar h-full bg-violet-500 rounded-full transition-all duration-500"
+                            data-width="{{ task_progress_rate|default(0) }}"></div>
 
                     </div>
 
@@ -308,22 +237,19 @@ Understand your business performance and productivity
                     <div class="flex justify-between text-sm mb-2">
 
                         <span>
-
                             To Do
-
                         </span>
 
                         <span class="text-slate-500">
-
-                            {{ todo_tasks or 0 }}
-
+                            {{ todo_tasks|default(0) }}
                         </span>
 
                     </div>
 
                     <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
 
-                        <div class="h-full bg-amber-500 rounded-full" style="width: {{ task_todo_rate or 0 }}%"></div>
+                        <div class="progress-bar h-full bg-amber-500 rounded-full transition-all duration-500"
+                            data-width="{{ task_todo_rate|default(0) }}"></div>
 
                     </div>
 
@@ -343,23 +269,17 @@ Understand your business performance and productivity
                 <div>
 
                     <h2 class="text-lg font-semibold">
-
                         Automation Performance
-
                     </h2>
 
                     <p class="text-sm text-slate-500 mt-1">
-
                         Monitor automated processes.
-
                     </p>
 
                 </div>
 
                 <span class="text-2xl">
-
                     🤖
-
                 </span>
 
             </div>
@@ -370,15 +290,11 @@ Understand your business performance and productivity
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                     <p class="text-sm text-slate-500">
-
                         Active
-
                     </p>
 
                     <p class="text-2xl font-bold mt-2">
-
-                        {{ active_automations or 0 }}
-
+                        {{ active_automations|default(0) }}
                     </p>
 
                 </div>
@@ -387,15 +303,11 @@ Understand your business performance and productivity
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                     <p class="text-sm text-slate-500">
-
                         Runs
-
                     </p>
 
                     <p class="text-2xl font-bold mt-2">
-
-                        {{ automation_runs or 0 }}
-
+                        {{ automation_runs|default(0) }}
                     </p>
 
                 </div>
@@ -404,15 +316,11 @@ Understand your business performance and productivity
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                     <p class="text-sm text-slate-500">
-
                         Successful
-
                     </p>
 
                     <p class="text-2xl font-bold mt-2">
-
-                        {{ successful_runs or 0 }}
-
+                        {{ successful_runs|default(0) }}
                     </p>
 
                 </div>
@@ -421,15 +329,11 @@ Understand your business performance and productivity
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                     <p class="text-sm text-slate-500">
-
                         Failed
-
                     </p>
 
                     <p class="text-2xl font-bold mt-2">
-
-                        {{ failed_runs or 0 }}
-
+                        {{ failed_runs|default(0) }}
                     </p>
 
                 </div>
@@ -441,7 +345,7 @@ Understand your business performance and productivity
     </div>
 
 
-    <!-- Email Analysis -->
+    <!-- Email Activity -->
 
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
 
@@ -450,23 +354,17 @@ Understand your business performance and productivity
             <div>
 
                 <h2 class="text-lg font-semibold">
-
                     Email Activity
-
                 </h2>
 
                 <p class="text-sm text-slate-500 mt-1">
-
                     Overview of your business communications.
-
                 </p>
 
             </div>
 
             <span class="text-2xl">
-
                 ✉️
-
             </span>
 
         </div>
@@ -477,15 +375,11 @@ Understand your business performance and productivity
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                 <p class="text-sm text-slate-500">
-
                     Received
-
                 </p>
 
                 <p class="text-2xl font-bold mt-2">
-
-                    {{ emails_received or 0 }}
-
+                    {{ emails_received|default(0) }}
                 </p>
 
             </div>
@@ -494,15 +388,11 @@ Understand your business performance and productivity
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                 <p class="text-sm text-slate-500">
-
                     Sent
-
                 </p>
 
                 <p class="text-2xl font-bold mt-2">
-
-                    {{ emails_sent or 0 }}
-
+                    {{ emails_sent|default(0) }}
                 </p>
 
             </div>
@@ -511,15 +401,11 @@ Understand your business performance and productivity
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                 <p class="text-sm text-slate-500">
-
                     Unread
-
                 </p>
 
                 <p class="text-2xl font-bold mt-2">
-
-                    {{ unread_emails or 0 }}
-
+                    {{ unread_emails|default(0) }}
                 </p>
 
             </div>
@@ -528,15 +414,11 @@ Understand your business performance and productivity
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
 
                 <p class="text-sm text-slate-500">
-
                     Requiring Action
-
                 </p>
 
                 <p class="text-2xl font-bold mt-2">
-
-                    {{ action_emails or 0 }}
-
+                    {{ action_emails|default(0) }}
                 </p>
 
             </div>
@@ -546,9 +428,10 @@ Understand your business performance and productivity
     </div>
 
 
-    <!-- Business Activity -->
+    <!-- Activity & Metrics -->
 
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
 
         <!-- Recent Activity -->
 
@@ -557,15 +440,11 @@ Understand your business performance and productivity
             <div class="p-6 border-b border-slate-800">
 
                 <h2 class="text-lg font-semibold">
-
                     Recent Activity
-
                 </h2>
 
                 <p class="text-sm text-slate-500 mt-1">
-
                     Latest activity across FlowForge.
-
                 </p>
 
             </div>
@@ -582,7 +461,7 @@ Understand your business performance and productivity
                     <div
                         class="w-9 h-9 rounded-xl bg-violet-600/10 text-violet-400 flex items-center justify-center flex-shrink-0">
 
-                        {{ activity.icon or "•" }}
+                        {{ activity.icon|default("•") }}
 
                     </div>
 
@@ -590,9 +469,7 @@ Understand your business performance and productivity
                     <div class="flex-1 min-w-0">
 
                         <p class="text-sm">
-
                             {{ activity.message }}
-
                         </p>
 
                         {% if activity.created_at %}
@@ -618,15 +495,11 @@ Understand your business performance and productivity
             <div class="py-12 text-center">
 
                 <div class="text-3xl">
-
                     📭
-
                 </div>
 
                 <p class="text-sm text-slate-500 mt-3">
-
                     No recent activity.
-
                 </p>
 
             </div>
@@ -641,42 +514,33 @@ Understand your business performance and productivity
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
 
             <h2 class="text-lg font-semibold">
-
                 Key Metrics
-
             </h2>
 
             <p class="text-sm text-slate-500 mt-1">
-
                 Important indicators for your business.
-
             </p>
 
 
             <div class="space-y-4 mt-6">
 
+
                 <div class="flex items-center justify-between p-4 bg-slate-950 border border-slate-800 rounded-xl">
 
                     <div>
 
                         <p class="text-sm font-medium">
-
                             Task Completion Rate
-
                         </p>
 
                         <p class="text-xs text-slate-500 mt-1">
-
                             Percentage of tasks completed
-
                         </p>
 
                     </div>
 
                     <span class="text-xl font-bold">
-
-                        {{ task_completion_rate or 0 }}%
-
+                        {{ task_completion_rate|default(0) }}%
                     </span>
 
                 </div>
@@ -687,23 +551,17 @@ Understand your business performance and productivity
                     <div>
 
                         <p class="text-sm font-medium">
-
                             Automation Success Rate
-
                         </p>
 
                         <p class="text-xs text-slate-500 mt-1">
-
                             Successful automation executions
-
                         </p>
 
                     </div>
 
                     <span class="text-xl font-bold">
-
-                        {{ automation_success_rate or 0 }}%
-
+                        {{ automation_success_rate|default(0) }}%
                     </span>
 
                 </div>
@@ -714,23 +572,17 @@ Understand your business performance and productivity
                     <div>
 
                         <p class="text-sm font-medium">
-
                             Emails Requiring Action
-
                         </p>
 
                         <p class="text-xs text-slate-500 mt-1">
-
                             Messages that may need attention
-
                         </p>
 
                     </div>
 
                     <span class="text-xl font-bold">
-
-                        {{ action_emails or 0 }}
-
+                        {{ action_emails|default(0) }}
                     </span>
 
                 </div>
@@ -741,23 +593,17 @@ Understand your business performance and productivity
                     <div>
 
                         <p class="text-sm font-medium">
-
                             Active Workload
-
                         </p>
 
                         <p class="text-xs text-slate-500 mt-1">
-
                             Open tasks currently being handled
-
                         </p>
 
                     </div>
 
                     <span class="text-xl font-bold">
-
-                        {{ active_workload or 0 }}
-
+                        {{ active_workload|default(0) }}
                     </span>
 
                 </div>
@@ -769,31 +615,27 @@ Understand your business performance and productivity
     </div>
 
 
-    <!-- Analysis Insight -->
+    <!-- AI Insight -->
 
     <div class="bg-violet-600/10 border border-violet-500/20 rounded-2xl p-6">
 
         <div class="flex items-start gap-4">
 
             <div class="text-3xl">
-
                 💡
-
             </div>
 
 
             <div>
 
                 <h2 class="font-semibold text-violet-300">
-
                     Business Insight
-
                 </h2>
 
                 <p class="text-sm text-slate-400 mt-2">
 
-                    {{ analysis_summary or "Your business analysis will appear here once FlowForge has enough activity
-                    data to generate meaningful insights." }}
+                    {{ analysis_summary|default("Your business analysis will appear here once FlowForge has enough
+                    activity data to generate meaningful insights.") }}
 
                 </p>
 
@@ -805,5 +647,27 @@ Understand your business performance and productivity
     ```
 
 </div>
+
+<!-- Progress Bar Script -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const progressBars = document.querySelectorAll(".progress-bar");
+
+        progressBars.forEach(function (bar) {
+
+            let width = parseFloat(bar.dataset.width) || 0;
+
+            width = Math.max(0, Math.min(100, width));
+
+            bar.style.width = width + "%";
+
+        });
+
+    });
+
+</script>
 
 {% endblock %}
