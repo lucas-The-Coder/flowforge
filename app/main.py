@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api.auth import router as auth_router
 from app.api.crm import router as crm_router
+from app.api.leads import router as leads_router
 from app.config import settings
 from app.web import router as web_router
 
@@ -14,7 +15,6 @@ app = FastAPI(
 )
 
 
-# Static files
 app.mount(
     "/static",
     StaticFiles(directory="app/static"),
@@ -22,9 +22,9 @@ app.mount(
 )
 
 
-# Application routers
 app.include_router(auth_router)
 app.include_router(crm_router)
+app.include_router(leads_router)
 app.include_router(web_router)
 
 

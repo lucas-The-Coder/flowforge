@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block title %}
+Sales Pipeline | FlowForge
+{% endblock %}
+
+{% block header %}
+Sales Pipeline
+{% endblock %}
+
+{% block header_subtitle %}
+Manage opportunities for {{ workspace.name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+
+        <div>
+
+            <p class="text-sm text-slate-500 mb-2">
+                Sales
+            </p>
+
+            <h1 class="text-3xl font-bold tracking-tight">
+                Pipeline
+            </h1>
+
+            <p class="text-slate-400 mt-2">
+                Track opportunities from first contact to closed deal.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/leads/new"
+            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition shadow-lg shadow-violet-900/20"
+        >
+            <span class="text-lg">+</span>
+            Add lead
+        </a>
+
+    </div>
+
+
+    <!-- Metrics -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Open opportunities
+            </p>
+
+            <p class="text-3xl font-bold mt-3">
+                {{ leads|selectattr("status", "ne", "won")|selectattr("status", "ne", "lost")|list|length }}
+            </p>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Pipeline value
+            </p>
+
+            <p class="text-3xl font-bold mt-3">
+                R {{ "{:,.2f}".format(total_pipeline_value) }}
+            </p>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Weighted value
+            </p>
+
+            <p class="text-3xl font-bold mt-3">
+                R {{ "{:,.2f}".format(weighted_pipeline_value) }}
+            </p>
+
+        </div>
+
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+
+            <p class="text-sm text-slate-500">
+                Won
+            </p>
+
+            <p class="text-3xl font-bold mt-3">
+                {{ leads|selectattr("status", "equalto", "won")|list|length }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Kanban -->
+    <div class="overflow-x-auto pb-4">
+
+        <div class="flex gap-4 min-w-[1450px]">
+
+            {% for status_name in ["new", "contacted", "qualified", "proposal", "won", "lost"] %}
+
+            <div class="w-64 flex-shrink-0">
+
+                <!-- Column header -->
+                <div class="flex items-center justify-between mb-3">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="w-2.5 h-2.5 rounded-full
+                            {% if status_name == 'new' %}
+                                bg-slate-400
+                            {% elif status_name == 'contacted' %}
+                                bg-blue-400
+                            {% elif status_name == 'qualified' %}
+                                bg-amber-400
+                            {% elif status_name == 'proposal' %}
+                                bg-violet-400
+                            {% elif status_name == 'won' %}
+                                bg-emerald-400
+                            {% else %}
+                                bg-red-400
+                            {% endif %}
+                        "></span>
+
+                        <h2 class="font-semibold text-sm">
+                            {{ status_labels[status_name] }}
+                        </h2>
+
+                    </div>
+
+                    <span class="text-xs text-slate-600">
+                        {{ grouped_leads[status_name]|length }}
+                    </span>
+
+                </div>
+
+
+                <!-- Column -->
+                <div class="space-y-3">
+
+                    {% for lead in grouped_leads[status_name] %}
+
+                    <div
+                        class="bg-slate-900 border border-slate-800 rounded-2xl p-4 hover:border-slate-700 transition"
+                    >
+
+                        <div class="flex items-start justify-between gap-3">
+
+                            <div class="min-w-0">
+
+                                <h3 class="font-medium leading-5">
+                                    {{ lead.title }}
+                                </h3>
+
+                                {% if lead.company_id and lead.company_id in company_map %}
+
+                                <p class="text-xs text-violet-400 mt-2 truncate">
+                                    {{ company_map[lead.company_id] }}
+                                </p>
+
+                                {% elif lead.contact_id and lead.contact_id in contact_map %}
+
+                                <p class="text-xs text-violet-400 mt-2 truncate">
+                                    {{ contact_map[lead.contact_id] }}
+                                </p>
+
+                                {% else %}
+
+                                <p class="text-xs text-slate-600 mt-2">
+                                    No company or contact
+                                </p>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        {% if lead.value is not none %}
+
+                        <div class="mt-4">
+
+                            <p class="text-lg font-bold">
+                                R {{ "{:,.2f}".format(lead.value) }}
+                            </p>
+
+                            <p class="text-xs text-slate-600 mt-1">
+                                {{ lead.probability }}% probability
+                            </p>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if lead.expected_close_date %}
+
+                        <p class="text-xs text-slate-500 mt-4">
+                            Close:
+                            {{ lead.expected_close_date.strftime("%d %b %Y") }}
+                        </p>
+
+                        {% endif %}
+
+
+                        <!-- Status actions -->
+                        <form
+                            method="post"
+                            action="/leads/{{ lead.id }}/status"
+                            class="mt-4"
+                        >
+
+                            <select
+                                name="status_name"
+                                onchange="this.form.submit()"
+                                class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-400 outline-none focus:border-violet-500"
+                            >
+
+                                {% for option in ["new", "contacted", "qualified", "proposal", "won", "lost"] %}
+
+                                <option
+                                    value="{{ option }}"
+                                    {% if lead.status == option %}selected{% endif %}
+                                >
+                                    {{ status_labels[option] }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </form>
+
+                    </div>
+
+                    {% endfor %}
+
+
+                    {% if not grouped_leads[status_name] %}
+
+                    <div class="border border-dashed border-slate-800 rounded-2xl p-6 text-center">
+
+                        <p class="text-xs text-slate-700">
+                            No leads
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

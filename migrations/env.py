@@ -13,6 +13,12 @@ from app.models import (
     Company,
     Contact,
     Activity,
+    Lead,
+    Task,
+    CalendarEvent,
+    EmailMessage,
+    Automation,
+    AutomationRun,
 )
 
 
