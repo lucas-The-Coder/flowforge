@@ -1,9 +1,19 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
+from datetime import datetime, timezone
+
+from fastapi import (
+    APIRouter,
+    Depends,
+    Form,
+    HTTPException,
+    Request,
+    status,
+)
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.models.activity import Activity
 from app.models.company import Company
 from app.models.contact import Contact
 from app.models.user import User
@@ -254,6 +264,17 @@ def company_detail(
         )
     ).all()
 
+    activities = db.scalars(
+        select(Activity)
+        .where(
+            Activity.company_id == company.id,
+            Activity.workspace_id == workspace.id,
+        )
+        .order_by(
+            Activity.occurred_at.desc()
+        )
+    ).all()
+
     return templates.TemplateResponse(
         request=request,
         name="company_detail.html",
@@ -265,6 +286,7 @@ def company_detail(
             "workspace": workspace,
             "company": company,
             "contacts": contacts,
+            "activities": activities,
         },
     )
 
@@ -291,12 +313,79 @@ def delete_company(
             detail="Company not found.",
         )
 
-    # Contacts use ON DELETE SET NULL on company_id.
     db.delete(company)
     db.commit()
 
     return RedirectResponse(
         url="/companies",
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+
+@router.post(
+    "/companies/{company_id}/activities",
+)
+def create_company_activity(
+    company_id: str,
+    activity_type: str = Form(...),
+    title: str = Form(...),
+    description: str | None = Form(None),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+    workspace=Depends(get_current_workspace),
+):
+    company = db.scalar(
+        select(Company).where(
+            Company.id == company_id,
+            Company.workspace_id == workspace.id,
+        )
+    )
+
+    if not company:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Company not found.",
+        )
+
+    allowed_types = {
+        "note",
+        "call",
+        "meeting",
+        "email",
+        "task",
+    }
+
+    activity_type = activity_type.strip().lower()
+
+    if activity_type not in allowed_types:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid activity type.",
+        )
+
+    title = title.strip()
+
+    if not title:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Activity title is required.",
+        )
+
+    activity = Activity(
+        workspace_id=workspace.id,
+        company_id=company.id,
+        contact_id=None,
+        activity_type=activity_type,
+        title=title,
+        description=description.strip() if description else None,
+        occurred_at=datetime.now(timezone.utc),
+    )
+
+    db.add(activity)
+    db.commit()
+
+    return RedirectResponse(
+        url=f"/companies/{company.id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
@@ -406,7 +495,9 @@ def new_contact_page(
     )
 
 
-@router.post("/contacts")
+@router.post(
+    "/contacts",
+)
 def create_contact(
     first_name: str = Form(...),
     last_name: str = Form(...),
@@ -628,6 +719,17 @@ def contact_detail(
             )
         )
 
+    activities = db.scalars(
+        select(Activity)
+        .where(
+            Activity.contact_id == contact.id,
+            Activity.workspace_id == workspace.id,
+        )
+        .order_by(
+            Activity.occurred_at.desc()
+        )
+    ).all()
+
     return templates.TemplateResponse(
         request=request,
         name="contact_detail.html",
@@ -639,6 +741,7 @@ def contact_detail(
             "workspace": workspace,
             "contact": contact,
             "company": company,
+            "activities": activities,
         },
     )
 
@@ -670,6 +773,74 @@ def delete_contact(
 
     return RedirectResponse(
         url="/contacts",
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+
+@router.post(
+    "/contacts/{contact_id}/activities",
+)
+def create_contact_activity(
+    contact_id: str,
+    activity_type: str = Form(...),
+    title: str = Form(...),
+    description: str | None = Form(None),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+    workspace=Depends(get_current_workspace),
+):
+    contact = db.scalar(
+        select(Contact).where(
+            Contact.id == contact_id,
+            Contact.workspace_id == workspace.id,
+        )
+    )
+
+    if not contact:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Contact not found.",
+        )
+
+    allowed_types = {
+        "note",
+        "call",
+        "meeting",
+        "email",
+        "task",
+    }
+
+    activity_type = activity_type.strip().lower()
+
+    if activity_type not in allowed_types:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid activity type.",
+        )
+
+    title = title.strip()
+
+    if not title:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Activity title is required.",
+        )
+
+    activity = Activity(
+        workspace_id=workspace.id,
+        contact_id=contact.id,
+        company_id=contact.company_id,
+        activity_type=activity_type,
+        title=title,
+        description=description.strip() if description else None,
+        occurred_at=datetime.now(timezone.utc),
+    )
+
+    db.add(activity)
+    db.commit()
+
+    return RedirectResponse(
+        url=f"/contacts/{contact.id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 

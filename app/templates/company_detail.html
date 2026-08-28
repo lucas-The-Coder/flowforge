@@ -17,12 +17,15 @@ Company details
 <div class="space-y-6">
 
     <div>
+
         <a href="/companies" class="text-sm text-violet-400 hover:text-violet-300 transition">
             ← Back to companies
         </a>
+
     </div>
 
 
+    <!-- Company profile -->
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
 
         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
@@ -158,6 +161,7 @@ Company details
         </div>
 
 
+        <!-- Notes -->
         <div class="mt-8 pt-8 border-t border-slate-800">
 
             <p class="text-xs uppercase tracking-wider text-slate-600">
@@ -173,6 +177,7 @@ Company details
     </div>
 
 
+    <!-- Contacts -->
     <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
 
         <div
@@ -258,6 +263,172 @@ Company details
         </div>
 
         {% endif %}
+
+    </div>
+
+
+    <!-- Company activity -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+
+        <div>
+
+            <h2 class="text-lg font-semibold">
+                Activity
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Company communication and actions
+            </p>
+
+        </div>
+
+
+        <!-- Add activity -->
+        <form method="post" action="/companies/{{ company.id }}/activities"
+            class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+
+            <div>
+
+                <label for="company_activity_type" class="block text-sm font-medium mb-2">
+                    Type
+                </label>
+
+                <select id="company_activity_type" name="activity_type" required
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-violet-500">
+                    <option value="note">Note</option>
+                    <option value="call">Call</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="email">Email</option>
+                    <option value="task">Task</option>
+                </select>
+
+            </div>
+
+
+            <div class="lg:col-span-2">
+
+                <label for="company_activity_title" class="block text-sm font-medium mb-2">
+                    Title
+                </label>
+
+                <input id="company_activity_title" name="title" type="text" required maxlength="255"
+                    placeholder="Quarterly review"
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-violet-500">
+
+            </div>
+
+
+            <div class="flex items-end">
+
+                <button type="submit"
+                    class="w-full px-4 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 font-semibold transition">
+                    Add activity
+                </button>
+
+            </div>
+
+
+            <div class="lg:col-span-4">
+
+                <label for="company_activity_description" class="block text-sm font-medium mb-2">
+                    Details
+                </label>
+
+                <textarea id="company_activity_description" name="description" rows="3" placeholder="What happened?"
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-violet-500 resize-none"></textarea>
+
+            </div>
+
+        </form>
+
+
+        <!-- Activity timeline -->
+        <div class="mt-8 pt-8 border-t border-slate-800">
+
+            {% if activities %}
+
+            <div class="space-y-6">
+
+                {% for activity in activities %}
+
+                <div class="flex gap-4">
+
+                    <div class="w-10 h-10 flex-shrink-0 rounded-full bg-slate-800 flex items-center justify-center">
+
+                        {% if activity.activity_type == "email" %}
+                        📧
+                        {% elif activity.activity_type == "call" %}
+                        📞
+                        {% elif activity.activity_type == "meeting" %}
+                        📅
+                        {% elif activity.activity_type == "task" %}
+                        ✅
+                        {% else %}
+                        📝
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="min-w-0 flex-1">
+
+                        <p class="font-medium">
+                            {{ activity.title }}
+                        </p>
+
+                        <div class="flex flex-wrap items-center gap-2 mt-1">
+
+                            <span class="text-xs uppercase tracking-wider text-slate-600">
+                                {{ activity.activity_type }}
+                            </span>
+
+                            <span class="text-xs text-slate-700">
+                                •
+                            </span>
+
+                            <span class="text-xs text-slate-600">
+                                {{ activity.occurred_at.strftime("%d %b %Y %H:%M") }}
+                            </span>
+
+                        </div>
+
+                        {% if activity.description %}
+
+                        <p class="text-sm text-slate-400 mt-2 leading-6 whitespace-pre-wrap">
+                            {{ activity.description }}
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="py-10 text-center">
+
+                <div class="text-3xl mb-3">
+                    📋
+                </div>
+
+                <p class="text-slate-500">
+                    No company activity yet.
+                </p>
+
+                <p class="text-xs text-slate-600 mt-1">
+                    Add the first interaction above.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
 
     </div>
 
